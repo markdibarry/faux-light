@@ -1,0 +1,200 @@
+[gd_scene load_steps=12 format=4 uid="uid://bp2prch5fngw6"]
+
+[ext_resource type="Shader" path="res://shaders/DitherTex.gdshader" id="1_rp666"]
+[ext_resource type="Texture2D" uid="uid://cv2ophpod6f0" path="res://assets/Pizza-Hat.jpg" id="2_qggg6"]
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_rfvq8"]
+shader = ExtResource("1_rp666")
+shader_parameter/quantize_size = 1.0
+shader_parameter/handle_scale = null
+shader_parameter/handle_subpixels = true
+shader_parameter/dither_enabled = false
+shader_parameter/bayer_pattern = 1.0
+shader_parameter/divisions = 1.0
+shader_parameter/contrast = 1.0
+shader_parameter/shift = 0.0
+shader_parameter/grayscale = null
+shader_parameter/use_palette = null
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_71etj"]
+shader = ExtResource("1_rp666")
+shader_parameter/quantize_size = 8.0
+shader_parameter/handle_scale = true
+shader_parameter/handle_subpixels = true
+shader_parameter/dither_enabled = false
+shader_parameter/bayer_pattern = 1.0
+shader_parameter/divisions = 1.0
+shader_parameter/contrast = 1.0
+shader_parameter/shift = 0.0
+shader_parameter/grayscale = null
+shader_parameter/use_palette = null
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_vg0yh"]
+shader = ExtResource("1_rp666")
+shader_parameter/quantize_size = 5.0
+shader_parameter/handle_scale = true
+shader_parameter/handle_subpixels = true
+shader_parameter/dither_enabled = true
+shader_parameter/bayer_pattern = 1.0
+shader_parameter/divisions = 1.0
+shader_parameter/contrast = 1.0
+shader_parameter/shift = 0.0
+shader_parameter/grayscale = null
+shader_parameter/use_palette = null
+
+[sub_resource type="Gradient" id="Gradient_axpb5"]
+offsets = PackedFloat32Array(0, 0.997118)
+colors = PackedColorArray(0, 1, 0, 1, 0, 0, 0, 1)
+
+[sub_resource type="GradientTexture2D" id="GradientTexture2D_txabm"]
+gradient = SubResource("Gradient_axpb5")
+width = 33
+height = 33
+fill = 1
+fill_from = Vector2(0.5, 0.5)
+fill_to = Vector2(0.15, 0.15)
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_a8yss"]
+resource_local_to_scene = true
+shader = ExtResource("1_rp666")
+shader_parameter/quantize_size = 1.0
+shader_parameter/handle_scale = null
+shader_parameter/handle_subpixels = true
+shader_parameter/dither_enabled = false
+shader_parameter/bayer_pattern = 1.0
+shader_parameter/divisions = 1.0
+shader_parameter/contrast = 1.0
+shader_parameter/shift = 0.0
+shader_parameter/grayscale = null
+shader_parameter/use_palette = null
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_irwvc"]
+shader = ExtResource("1_rp666")
+shader_parameter/quantize_size = 2.0
+shader_parameter/handle_scale = true
+shader_parameter/handle_subpixels = true
+shader_parameter/dither_enabled = false
+shader_parameter/bayer_pattern = 1.0
+shader_parameter/divisions = 1.0
+shader_parameter/contrast = 1.0
+shader_parameter/shift = 0.0
+shader_parameter/grayscale = null
+shader_parameter/use_palette = null
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_ukdf8"]
+shader = ExtResource("1_rp666")
+shader_parameter/quantize_size = 1.0
+shader_parameter/handle_scale = null
+shader_parameter/handle_subpixels = true
+shader_parameter/dither_enabled = false
+shader_parameter/bayer_pattern = 1.0
+shader_parameter/divisions = 1.0
+shader_parameter/contrast = 1.0
+shader_parameter/shift = 0.0
+shader_parameter/grayscale = null
+shader_parameter/use_palette = null
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_xyhaa"]
+shader = ExtResource("1_rp666")
+shader_parameter/quantize_size = 1.0
+shader_parameter/handle_scale = null
+shader_parameter/handle_subpixels = true
+shader_parameter/dither_enabled = false
+shader_parameter/bayer_pattern = 1.0
+shader_parameter/divisions = 1.0
+shader_parameter/contrast = 1.0
+shader_parameter/shift = 0.0
+shader_parameter/grayscale = null
+shader_parameter/use_palette = null
+
+[node name="Node2D" type="Node2D"]
+
+[node name="TextureRect" type="TextureRect" parent="."]
+visible = false
+material = SubResource("ShaderMaterial_rfvq8")
+offset_left = -227.0
+offset_top = -162.0
+offset_right = 382.0
+offset_bottom = 349.0
+texture = ExtResource("2_qggg6")
+expand_mode = 2
+stretch_mode = 2
+
+[node name="CanvasGroup" type="CanvasGroup" parent="."]
+position = Vector2(-8, 1)
+
+[node name="Sprite2DFlip2" type="Sprite2D" parent="CanvasGroup"]
+material = SubResource("ShaderMaterial_71etj")
+position = Vector2(528, 38)
+texture = ExtResource("2_qggg6")
+flip_h = true
+region_rect = Rect2(0, 0, -500, 500)
+
+[node name="Gradient" type="Sprite2D" parent="CanvasGroup"]
+material = SubResource("ShaderMaterial_vg0yh")
+position = Vector2(156, -27)
+texture = SubResource("GradientTexture2D_txabm")
+
+[node name="Gradient2" type="Sprite2D" parent="CanvasGroup"]
+material = SubResource("ShaderMaterial_vg0yh")
+position = Vector2(255, -48)
+texture = SubResource("GradientTexture2D_txabm")
+centered = false
+
+[node name="Sprite2D" type="Sprite2D" parent="CanvasGroup"]
+material = SubResource("ShaderMaterial_a8yss")
+scale = Vector2(0.1, 0.1)
+texture = ExtResource("2_qggg6")
+centered = false
+region_rect = Rect2(0, 0, -500, 500)
+
+[node name="Sprite2DFlip" type="Sprite2D" parent="CanvasGroup"]
+material = SubResource("ShaderMaterial_a8yss")
+position = Vector2(50, 0)
+scale = Vector2(0.1, 0.1)
+texture = ExtResource("2_qggg6")
+centered = false
+flip_h = true
+region_rect = Rect2(0, 0, -500, 500)
+
+[node name="Sprite2DCenter" type="Sprite2D" parent="CanvasGroup"]
+material = SubResource("ShaderMaterial_a8yss")
+position = Vector2(25, 96)
+scale = Vector2(0.1, 0.1)
+texture = ExtResource("2_qggg6")
+region_rect = Rect2(0, 0, -500, 500)
+
+[node name="Sprite2DCenterFlip" type="Sprite2D" parent="CanvasGroup"]
+material = SubResource("ShaderMaterial_a8yss")
+position = Vector2(75, 96)
+scale = Vector2(0.1, 0.1)
+texture = ExtResource("2_qggg6")
+flip_h = true
+flip_v = true
+region_rect = Rect2(0, 0, -500, 500)
+
+[node name="Sprite2D2" type="Sprite2D" parent="CanvasGroup"]
+material = SubResource("ShaderMaterial_irwvc")
+position = Vector2(107, -1)
+scale = Vector2(0.1, 0.1)
+texture = ExtResource("2_qggg6")
+centered = false
+region_rect = Rect2(0, 0, -500, 500)
+
+[node name="Sprite2DCenter2" type="Sprite2D" parent="CanvasGroup"]
+material = SubResource("ShaderMaterial_ukdf8")
+position = Vector2(132, 95)
+scale = Vector2(0.1, 0.1)
+texture = ExtResource("2_qggg6")
+flip_h = true
+region_rect = Rect2(0, 0, -500, 500)
+
+[node name="Sprite2DCenterFlip2" type="Sprite2D" parent="CanvasGroup"]
+material = SubResource("ShaderMaterial_xyhaa")
+position = Vector2(179, 98)
+scale = Vector2(0.1, 0.1)
+texture = ExtResource("2_qggg6")
+offset = Vector2(34, 0)
+flip_h = true
+flip_v = true
+region_rect = Rect2(0, 0, -500, 500)

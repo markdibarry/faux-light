@@ -1,0 +1,179 @@
+[gd_scene load_steps=18 format=4 uid="uid://brfv1wjn3c4tv"]
+
+[ext_resource type="Script" path="res://LightDisplay.cs" id="1_64alp"]
+[ext_resource type="Texture2D" uid="uid://c2hyvlockg1x2" path="res://assets/forest/Layer_0000_9.png" id="2_288un"]
+[ext_resource type="Texture2D" uid="uid://ds4y4kxcgmo0e" path="res://assets/forest/Layer_0001_8.png" id="3_tfvc6"]
+[ext_resource type="Script" path="res://LightSource.cs" id="5_b4sbi"]
+[ext_resource type="PackedScene" path="res://GodotBot.tscn" id="5_tjmol"]
+[ext_resource type="Texture2D" uid="uid://bvqsov7ujjxqs" path="res://assets/block.png" id="7_d8k31"]
+[ext_resource type="Texture2D" uid="uid://oint6tcqmh8" path="res://assets/fire/Fire_Spreadsheet.png" id="8_qhqgi"]
+[ext_resource type="Texture2D" uid="uid://k1o6bmlaxuns" path="res://assets/forest/Layer_0005_5.png" id="9_hacek"]
+
+[sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_0esiw"]
+texture = ExtResource("7_d8k31")
+0:0/0 = 0
+0:0/0/physics_layer_0/polygon_0/points = PackedVector2Array(-8, -8, 8, -8, 8, 8, -8, 8)
+
+[sub_resource type="TileSet" id="TileSet_6brs3"]
+physics_layer_0/collision_layer = 1
+sources/0 = SubResource("TileSetAtlasSource_0esiw")
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_7vpxa"]
+atlas = ExtResource("8_qhqgi")
+region = Rect2(0, 0, 16, 16)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_ma2bd"]
+atlas = ExtResource("8_qhqgi")
+region = Rect2(16, 0, 16, 16)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_ts36y"]
+atlas = ExtResource("8_qhqgi")
+region = Rect2(0, 16, 16, 16)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_m8hgn"]
+atlas = ExtResource("8_qhqgi")
+region = Rect2(16, 16, 16, 16)
+
+[sub_resource type="SpriteFrames" id="SpriteFrames_0wykd"]
+animations = [{
+"frames": [],
+"loop": true,
+"name": &"default",
+"speed": 5.0
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_7vpxa")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_ma2bd")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_ts36y")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_m8hgn")
+}],
+"loop": true,
+"name": &"new_animation",
+"speed": 5.0
+}]
+
+[sub_resource type="Gradient" id="Gradient_0bvsy"]
+offsets = PackedFloat32Array(0.5, 1)
+colors = PackedColorArray(0, 0, 0, 1, 0, 0, 0, 0)
+
+[sub_resource type="GradientTexture2D" id="GradientTexture2D_delhg"]
+gradient = SubResource("Gradient_0bvsy")
+width = 50
+height = 50
+fill = 1
+fill_from = Vector2(0.5, 0.5)
+fill_to = Vector2(0.15, 0.15)
+
+[node name="LightTest" type="Node"]
+
+[node name="Backgrounds" type="Node2D" parent="."]
+texture_filter = 1
+
+[node name="FollowBackgroundLayer" type="CanvasLayer" parent="Backgrounds"]
+layer = -1
+
+[node name="BlackBackground" type="ColorRect" parent="Backgrounds/FollowBackgroundLayer"]
+offset_right = 400.0
+offset_bottom = 300.0
+color = Color(0.1632, 0.21808, 0.32, 1)
+
+[node name="FarBackground" type="Sprite2D" parent="Backgrounds"]
+position = Vector2(0, -500)
+texture = ExtResource("2_288un")
+centered = false
+
+[node name="NearBackground" type="Sprite2D" parent="Backgrounds"]
+position = Vector2(0, -460)
+texture = ExtResource("3_tfvc6")
+centered = false
+
+[node name="TileMap" type="TileMap" parent="Backgrounds"]
+tile_set = SubResource("TileSet_6brs3")
+format = 2
+layer_0/tile_data = PackedInt32Array(0, 0, 0, 65536, 0, 0, 131072, 0, 0, 196608, 0, 0, 262144, 0, 0, 327680, 0, 0, 393216, 0, 0, 458752, 0, 0, 524288, 0, 0, 589824, 0, 0, 655360, 0, 0, 720896, 0, 0, 786432, 0, 0, 851968, 0, 0, 852026, 0, 0, 786490, 0, 0, 720954, 0, 0, 655418, 0, 0, 589882, 0, 0, 524346, 0, 0, 458810, 0, 0, 393274, 0, 0, 327738, 0, 0, 262202, 0, 0, 196666, 0, 0, 131130, 0, 0, 65594, 0, 0, 58, 0, 0, 851969, 0, 0, 851970, 0, 0, 851971, 0, 0, 851972, 0, 0, 851973, 0, 0, 851974, 0, 0, 851975, 0, 0, 851976, 0, 0, 851977, 0, 0, 851978, 0, 0, 851979, 0, 0, 851980, 0, 0, 851981, 0, 0, 851982, 0, 0, 851983, 0, 0, 851984, 0, 0, 851985, 0, 0, 851986, 0, 0, 851987, 0, 0, 851988, 0, 0, 851989, 0, 0, 851990, 0, 0, 851991, 0, 0, 851992, 0, 0, 851993, 0, 0, 851994, 0, 0, 851995, 0, 0, 851996, 0, 0, 851997, 0, 0, 851998, 0, 0, 851999, 0, 0, 852000, 0, 0, 852001, 0, 0, 852002, 0, 0, 852003, 0, 0, 852004, 0, 0, 852005, 0, 0, 852006, 0, 0, 852007, 0, 0, 852008, 0, 0, 852009, 0, 0, 852010, 0, 0, 852011, 0, 0, 852012, 0, 0, 852013, 0, 0, 852014, 0, 0, 852015, 0, 0, 852016, 0, 0, 852017, 0, 0, 852018, 0, 0, 852019, 0, 0, 852020, 0, 0, 852021, 0, 0, 852022, 0, 0, 852023, 0, 0, 852024, 0, 0, 852025, 0, 0)
+
+[node name="GodotBot" parent="." instance=ExtResource("5_tjmol")]
+position = Vector2(205, 181)
+
+[node name="Camera2D" type="Camera2D" parent="GodotBot"]
+ignore_rotation = false
+
+[node name="LightSource" type="Node2D" parent="GodotBot"]
+script = ExtResource("5_b4sbi")
+MaxSize = 200
+Speed = 0.5
+
+[node name="Fires" type="Node2D" parent="."]
+
+[node name="Fire1" type="AnimatedSprite2D" parent="Fires"]
+position = Vector2(130, 232)
+sprite_frames = SubResource("SpriteFrames_0wykd")
+animation = &"new_animation"
+autoplay = "new_animation"
+
+[node name="LightSource" type="Node2D" parent="Fires/Fire1"]
+script = ExtResource("5_b4sbi")
+Speed = 1.0
+
+[node name="Fire2" type="AnimatedSprite2D" parent="Fires"]
+position = Vector2(482, 194)
+sprite_frames = SubResource("SpriteFrames_0wykd")
+animation = &"new_animation"
+autoplay = "new_animation"
+
+[node name="LightSource" type="Node2D" parent="Fires/Fire2"]
+script = ExtResource("5_b4sbi")
+MaxSize = 150
+
+[node name="Fire3" type="AnimatedSprite2D" parent="Fires"]
+position = Vector2(746, 198)
+sprite_frames = SubResource("SpriteFrames_0wykd")
+animation = &"new_animation"
+autoplay = "new_animation"
+
+[node name="LightSource" type="Node2D" parent="Fires/Fire3"]
+script = ExtResource("5_b4sbi")
+
+[node name="Fire4" type="AnimatedSprite2D" parent="Fires"]
+position = Vector2(190, 96)
+sprite_frames = SubResource("SpriteFrames_0wykd")
+animation = &"new_animation"
+autoplay = "new_animation"
+
+[node name="LightSource" type="Node2D" parent="Fires/Fire4"]
+script = ExtResource("5_b4sbi")
+
+[node name="Foregrounds" type="Node2D" parent="."]
+
+[node name="LightDisplay" type="Node2D" parent="Foregrounds" node_paths=PackedStringArray("Sources")]
+texture_filter = 2
+script = ExtResource("1_64alp")
+Sources = [NodePath("../../GodotBot/LightSource"), NodePath("../../Fires/Fire1/LightSource"), NodePath("../../Fires/Fire2/LightSource"), NodePath("../../Fires/Fire3/LightSource"), NodePath("../../Fires/Fire4/LightSource")]
+Texture = SubResource("GradientTexture2D_delhg")
+QuantizeSize = 1
+Divisions = 1
+Pattern = 1
+Dither = true
+
+[node name="ColorBackground" type="ColorRect" parent="Foregrounds/LightDisplay"]
+modulate = Color(1, 1, 1, 0.803922)
+texture_filter = 1
+offset_right = 944.0
+offset_bottom = 365.0
+color = Color(0, 0, 0, 0.635294)
+
+[node name="Parallax2D" type="Parallax2D" parent="Foregrounds/LightDisplay"]
+scroll_scale = Vector2(1.2, 1)
+
+[node name="ForegroundTrees" type="Sprite2D" parent="Foregrounds/LightDisplay/Parallax2D"]
+texture_filter = 1
+position = Vector2(0, -458)
+texture = ExtResource("9_hacek")
+centered = false

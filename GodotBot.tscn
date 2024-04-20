@@ -1,0 +1,86 @@
+[gd_scene load_steps=12 format=4 uid="uid://ce2osusyvrwik"]
+
+[ext_resource type="Script" path="res://Character.cs" id="1_d7gh5"]
+[ext_resource type="Texture2D" uid="uid://dw8qey3tscne1" path="res://assets/GodotbotSide.png" id="2_hdn65"]
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_mfukx"]
+size = Vector2(18, 28)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_ja4pt"]
+atlas = ExtResource("2_hdn65")
+region = Rect2(32, 32, 32, 32)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_tox58"]
+atlas = ExtResource("2_hdn65")
+region = Rect2(64, 32, 32, 32)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_bge3i"]
+atlas = ExtResource("2_hdn65")
+region = Rect2(96, 32, 32, 32)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_j1gnn"]
+atlas = ExtResource("2_hdn65")
+region = Rect2(128, 32, 32, 32)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_on2jg"]
+atlas = ExtResource("2_hdn65")
+region = Rect2(160, 32, 32, 32)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_he43k"]
+atlas = ExtResource("2_hdn65")
+region = Rect2(0, 32, 32, 32)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_3v6t4"]
+atlas = ExtResource("2_hdn65")
+region = Rect2(0, 0, 32, 32)
+
+[sub_resource type="SpriteFrames" id="SpriteFrames_7g4cj"]
+animations = [{
+"frames": [{
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_ja4pt")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_tox58")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_bge3i")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_j1gnn")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_on2jg")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_he43k")
+}],
+"loop": true,
+"name": &"Walk",
+"speed": 10.0
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_3v6t4")
+}],
+"loop": true,
+"name": &"default",
+"speed": 5.0
+}]
+
+[node name="GodotBot" type="CharacterBody2D"]
+script = ExtResource("1_d7gh5")
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="."]
+position = Vector2(-1, -1)
+shape = SubResource("RectangleShape2D_mfukx")
+
+[node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="."]
+texture_filter = 1
+position = Vector2(-17, -16)
+sprite_frames = SubResource("SpriteFrames_7g4cj")
+animation = &"Walk"
+frame = 2
+frame_progress = 0.732435
+centered = false
+metadata/_edit_group_ = true

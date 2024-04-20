@@ -1,0 +1,104 @@
+[gd_scene load_steps=11 format=4 uid="uid://cqwpsw4ty31vk"]
+
+[ext_resource type="Shader" path="res://shaders/ColorUVDemo.gdshader" id="1_3clgq"]
+[ext_resource type="Texture2D" uid="uid://c12kj1yjl0hs3" path="res://assets/icon.svg" id="1_e3ywq"]
+[ext_resource type="Texture2D" uid="uid://dhoyvu2djof2l" path="res://assets/3DShapes.png" id="2_0ytmu"]
+[ext_resource type="Shader" path="res://shaders/ColorRectDitherTest.gdshader" id="4_bgg8d"]
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_7elxo"]
+shader = ExtResource("1_3clgq")
+
+[sub_resource type="Gradient" id="Gradient_thdm0"]
+metadata/_snap_count = 3
+metadata/_snap_enabled = true
+
+[sub_resource type="GradientTexture2D" id="GradientTexture2D_gltnl"]
+gradient = SubResource("Gradient_thdm0")
+fill_from = Vector2(1, 0)
+fill_to = Vector2(1, 1)
+
+[sub_resource type="Gradient" id="Gradient_tchki"]
+offsets = PackedFloat32Array(0, 0.327103, 0.682243, 1)
+colors = PackedColorArray(0.0528, 0.20988, 0.33, 1, 0.2548, 0.49, 0.26656, 1, 0.66528, 0.72, 0.1728, 1, 1, 0.91, 0.73, 1)
+metadata/_snap_count = 3
+
+[sub_resource type="GradientTexture1D" id="GradientTexture1D_c4c0a"]
+gradient = SubResource("Gradient_tchki")
+width = 4
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_8qlki"]
+shader = ExtResource("4_bgg8d")
+shader_parameter/quantize_size = 1.0
+shader_parameter/handle_scale = true
+shader_parameter/handle_subpixels = true
+shader_parameter/dither_enabled = true
+shader_parameter/bayer_pattern = 1.0
+shader_parameter/divisions = 1.0
+shader_parameter/contrast = 1.0
+shader_parameter/shift = 4.75e-08
+shader_parameter/grayscale = false
+shader_parameter/use_palette = false
+shader_parameter/palette = SubResource("GradientTexture1D_c4c0a")
+
+[node name="Control" type="MarginContainer"]
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="VBoxContainer" type="VBoxContainer" parent="."]
+layout_mode = 2
+theme_override_constants/separation = 0
+metadata/_edit_group_ = true
+
+[node name="HBoxContainer" type="HBoxContainer" parent="VBoxContainer"]
+layout_mode = 2
+size_flags_vertical = 3
+theme_override_constants/separation = 0
+
+[node name="MarginContainer" type="MarginContainer" parent="VBoxContainer/HBoxContainer"]
+layout_mode = 2
+size_flags_horizontal = 3
+
+[node name="GodotIcon" type="Sprite2D" parent="VBoxContainer/HBoxContainer/MarginContainer"]
+position = Vector2(86, 68)
+texture = ExtResource("1_e3ywq")
+
+[node name="ColorGradient" type="ColorRect" parent="VBoxContainer/HBoxContainer"]
+material = SubResource("ShaderMaterial_7elxo")
+layout_mode = 2
+size_flags_horizontal = 3
+
+[node name="HBoxContainer2" type="HBoxContainer" parent="VBoxContainer"]
+layout_mode = 2
+size_flags_vertical = 3
+theme_override_constants/separation = 0
+
+[node name="GreyGradient" type="TextureRect" parent="VBoxContainer/HBoxContainer2"]
+layout_mode = 2
+size_flags_horizontal = 3
+texture = SubResource("GradientTexture2D_gltnl")
+
+[node name="MarginContainer" type="MarginContainer" parent="VBoxContainer/HBoxContainer2"]
+layout_mode = 2
+size_flags_horizontal = 3
+
+[node name="3DShapes" type="Sprite2D" parent="VBoxContainer/HBoxContainer2/MarginContainer"]
+texture_filter = 1
+position = Vector2(3, 3)
+scale = Vector2(0.125, 0.125)
+texture = ExtResource("2_0ytmu")
+centered = false
+
+[node name="Control3" type="Control" parent="."]
+layout_mode = 2
+
+[node name="ColorRect" type="ColorRect" parent="Control3"]
+texture_filter = 1
+material = SubResource("ShaderMaterial_8qlki")
+layout_mode = 0
+offset_left = 59.0
+offset_top = 37.0
+offset_right = 319.0
+offset_bottom = 237.0
