@@ -26,7 +26,7 @@ window/stretch/scale_mode="integer"
 
 [dotnet]
 
-project/assembly_name="faux-light"
+project/assembly_name="FauxLight"
 
 [rendering]
 
