@@ -1,5 +1,5 @@
-﻿using Godot;
-using System;
+﻿using System;
+using Godot;
 
 namespace FauxLight;
 
@@ -23,7 +23,7 @@ public partial class MovingLight : LightSource
         if (_time >= Period * 100)
             _time -= Period * 100;
 
-        float posX = (float)Math.Sin((TimeWithOffset) * Period) * Distance;
+        float posX = (float)Math.Sin(TimeWithOffset * Period) * Distance;
         float posY = (float)Math.Sin(TimeWithOffset * Period * 2) * (Distance * 0.5f);
         Position = new Vector2(posX, posY);
     }
