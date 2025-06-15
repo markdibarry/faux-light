@@ -8,8 +8,10 @@ public partial class LightDisplay : Node2D
 {
     public LightDisplay()
     {
-        var shader = new ShaderMaterial() { Shader = GD.Load<Shader>("res://shaders/FauxLights.gdshader") };
-        shader.SetShaderParameter("handle_scale", true);
+        var shader = new ShaderMaterial() { Shader = GD.Load<Shader>("res://shaders/faux_lights.gdshader") };
+        shader.SetShaderParameter("ignore_scale", true);
+        shader.SetShaderParameter("texture_mode", 2);
+        shader.SetShaderParameter("alpha_mode", 2);
         _lightHub = new(shader);
         BackBufferCopy backBufferCopy = new() { CopyMode = BackBufferCopy.CopyModeEnum.Viewport };
         AddChild(backBufferCopy);

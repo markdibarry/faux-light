@@ -1,0 +1,33 @@
+[gd_scene load_steps=5 format=3 uid="uid://bg062alaay7uq"]
+
+[ext_resource type="Texture2D" uid="uid://c12kj1yjl0hs3" path="res://assets/icon.svg" id="1_bs577"]
+[ext_resource type="Shader" uid="uid://hi601atjjqfb" path="res://shaders/dither_main.gdshader" id="2_xcgye"]
+[ext_resource type="Texture2D" uid="uid://b7st3hj23u8vj" path="res://assets/orc.png" id="3_ggic3"]
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_xnal8"]
+shader = ExtResource("2_xcgye")
+shader_parameter/texture_mode = 0
+shader_parameter/alpha_mode = 2
+shader_parameter/quantize_size = 1
+shader_parameter/handle_scale = false
+shader_parameter/handle_subpixels = true
+shader_parameter/dither_enabled = true
+shader_parameter/bayer_pattern = 1
+shader_parameter/divisions = 1
+shader_parameter/contrast = 1.0
+shader_parameter/shift = 0.0
+shader_parameter/grayscale = false
+shader_parameter/use_palette = false
+
+[node name="MaskTest" type="Node2D"]
+
+[node name="CanvasGroup" type="CanvasGroup" parent="."]
+
+[node name="Icon" type="Sprite2D" parent="CanvasGroup"]
+position = Vector2(60, 58)
+texture = ExtResource("1_bs577")
+
+[node name="Orc" type="Sprite2D" parent="CanvasGroup"]
+material = SubResource("ShaderMaterial_xnal8")
+position = Vector2(119, 92)
+texture = ExtResource("3_ggic3")

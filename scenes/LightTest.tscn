@@ -4,7 +4,7 @@
 [ext_resource type="Texture2D" uid="uid://c2hyvlockg1x2" path="res://assets/forest/Layer_0000_9.png" id="2_288un"]
 [ext_resource type="Texture2D" uid="uid://ds4y4kxcgmo0e" path="res://assets/forest/Layer_0001_8.png" id="3_tfvc6"]
 [ext_resource type="Script" uid="uid://dcpnome5to4w1" path="res://LightSource.cs" id="5_b4sbi"]
-[ext_resource type="PackedScene" uid="uid://ce2osusyvrwik" path="res://GodotBot.tscn" id="5_tjmol"]
+[ext_resource type="PackedScene" uid="uid://ce2osusyvrwik" path="res://scenes/GodotBot.tscn" id="5_tjmol"]
 [ext_resource type="Texture2D" uid="uid://bvqsov7ujjxqs" path="res://assets/block.png" id="7_d8k31"]
 [ext_resource type="Texture2D" uid="uid://oint6tcqmh8" path="res://assets/fire/Fire_Spreadsheet.png" id="8_qhqgi"]
 [ext_resource type="Texture2D" uid="uid://k1o6bmlaxuns" path="res://assets/forest/Layer_0005_5.png" id="9_hacek"]
@@ -170,7 +170,7 @@ offset_bottom = 365.0
 color = Color(0, 0, 0, 0.635294)
 
 [node name="Parallax2D" type="Parallax2D" parent="Foregrounds/LightDisplay"]
-scroll_scale = Vector2(1.2, 1)
+scroll_scale = Vector2(1.4, 0)
 
 [node name="ForegroundTrees" type="Sprite2D" parent="Foregrounds/LightDisplay/Parallax2D"]
 texture_filter = 1

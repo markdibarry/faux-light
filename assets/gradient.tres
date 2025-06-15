@@ -1,4 +1,4 @@
-[gd_resource type="GradientTexture2D" load_steps=2 format=4 uid="uid://s0jve0ef5k8f"]
+[gd_resource type="GradientTexture2D" load_steps=2 format=3 uid="uid://s0jve0ef5k8f"]
 
 [sub_resource type="Gradient" id="Gradient_od0r7"]
 offsets = PackedFloat32Array(0.5, 1)
@@ -8,8 +8,8 @@ metadata/_snap_enabled = true
 
 [resource]
 gradient = SubResource("Gradient_od0r7")
-width = 50
-height = 50
+width = 300
+height = 300
 fill = 1
 fill_from = Vector2(0.5, 0.5)
 fill_to = Vector2(0.14, 0.14)

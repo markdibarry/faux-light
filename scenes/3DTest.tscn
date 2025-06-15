@@ -1,7 +1,7 @@
-[gd_scene load_steps=9 format=4 uid="uid://2p4nl1xbl2tf"]
+[gd_scene load_steps=9 format=3 uid="uid://2p4nl1xbl2tf"]
 
 [ext_resource type="Texture2D" uid="uid://c12kj1yjl0hs3" path="res://assets/icon.svg" id="1_udjrh"]
-[ext_resource type="Shader" path="res://shaders/ColorRectDitherTest.gdshader" id="2_kwjjp"]
+[ext_resource type="Shader" uid="uid://hi601atjjqfb" path="res://shaders/dither_main.gdshader" id="2_74uks"]
 
 [sub_resource type="Animation" id="Animation_nrdq4"]
 length = 0.001
@@ -85,8 +85,8 @@ tracks/2/keys = {
 
 [sub_resource type="AnimationLibrary" id="AnimationLibrary_oscby"]
 _data = {
-"RESET": SubResource("Animation_nrdq4"),
-"new_animation": SubResource("Animation_tj0xl")
+&"RESET": SubResource("Animation_nrdq4"),
+&"new_animation": SubResource("Animation_tj0xl")
 }
 
 [sub_resource type="Gradient" id="Gradient_mkl6m"]
@@ -100,13 +100,15 @@ gradient = SubResource("Gradient_mkl6m")
 width = 4
 
 [sub_resource type="ShaderMaterial" id="ShaderMaterial_wxh1w"]
-shader = ExtResource("2_kwjjp")
-shader_parameter/quantize_size = 4.0
-shader_parameter/handle_scale = null
+shader = ExtResource("2_74uks")
+shader_parameter/texture_mode = 1
+shader_parameter/alpha_mode = 0
+shader_parameter/quantize_size = 2
+shader_parameter/handle_scale = false
 shader_parameter/handle_subpixels = true
-shader_parameter/dither_enabled = false
-shader_parameter/bayer_pattern = 3.0
-shader_parameter/divisions = 3.0
+shader_parameter/dither_enabled = true
+shader_parameter/bayer_pattern = 1
+shader_parameter/divisions = 2
 shader_parameter/contrast = 1.0
 shader_parameter/shift = 0.0
 shader_parameter/grayscale = false
@@ -118,7 +120,7 @@ shader_parameter/palette = SubResource("GradientTexture1D_go1wt")
 [node name="AnimationPlayer" type="AnimationPlayer" parent="."]
 root_node = NodePath("../Sprite3D")
 libraries = {
-"": SubResource("AnimationLibrary_oscby")
+&"": SubResource("AnimationLibrary_oscby")
 }
 autoplay = "new_animation"
 speed_scale = 0.253

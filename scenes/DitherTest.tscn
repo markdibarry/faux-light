@@ -1,9 +1,9 @@
-[gd_scene load_steps=11 format=4 uid="uid://cqwpsw4ty31vk"]
+[gd_scene load_steps=11 format=3 uid="uid://cqwpsw4ty31vk"]
 
-[ext_resource type="Shader" path="res://shaders/ColorUVDemo.gdshader" id="1_3clgq"]
+[ext_resource type="Shader" uid="uid://d3r3ybmnn13m2" path="res://shaders/color_uv_demo.gdshader" id="1_3clgq"]
 [ext_resource type="Texture2D" uid="uid://c12kj1yjl0hs3" path="res://assets/icon.svg" id="1_e3ywq"]
 [ext_resource type="Texture2D" uid="uid://dhoyvu2djof2l" path="res://assets/3DShapes.png" id="2_0ytmu"]
-[ext_resource type="Shader" path="res://shaders/ColorRectDitherTest.gdshader" id="4_bgg8d"]
+[ext_resource type="Shader" uid="uid://hi601atjjqfb" path="res://shaders/dither_main.gdshader" id="4_ti36b"]
 
 [sub_resource type="ShaderMaterial" id="ShaderMaterial_7elxo"]
 shader = ExtResource("1_3clgq")
@@ -27,13 +27,15 @@ gradient = SubResource("Gradient_tchki")
 width = 4
 
 [sub_resource type="ShaderMaterial" id="ShaderMaterial_8qlki"]
-shader = ExtResource("4_bgg8d")
-shader_parameter/quantize_size = 1.0
-shader_parameter/handle_scale = true
-shader_parameter/handle_subpixels = true
+shader = ExtResource("4_ti36b")
+shader_parameter/texture_mode = 1
+shader_parameter/alpha_mode = 0
+shader_parameter/quantize_size = 1
+shader_parameter/ignore_scale = false
+shader_parameter/limit_subpixels = true
 shader_parameter/dither_enabled = true
-shader_parameter/bayer_pattern = 1.0
-shader_parameter/divisions = 1.0
+shader_parameter/bayer_pattern = 1
+shader_parameter/divisions = 1
 shader_parameter/contrast = 1.0
 shader_parameter/shift = 4.75e-08
 shader_parameter/grayscale = false

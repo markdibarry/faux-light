@@ -1,46 +1,52 @@
-[gd_scene load_steps=12 format=4 uid="uid://bp2prch5fngw6"]
+[gd_scene load_steps=12 format=3 uid="uid://bp2prch5fngw6"]
 
-[ext_resource type="Shader" path="res://shaders/DitherTex.gdshader" id="1_rp666"]
 [ext_resource type="Texture2D" uid="uid://cv2ophpod6f0" path="res://assets/Pizza-Hat.jpg" id="2_qggg6"]
+[ext_resource type="Shader" uid="uid://hi601atjjqfb" path="res://shaders/dither_main.gdshader" id="3_eim6d"]
 
 [sub_resource type="ShaderMaterial" id="ShaderMaterial_rfvq8"]
-shader = ExtResource("1_rp666")
-shader_parameter/quantize_size = 1.0
-shader_parameter/handle_scale = null
-shader_parameter/handle_subpixels = true
+shader = ExtResource("3_eim6d")
+shader_parameter/texture_mode = 0
+shader_parameter/alpha_mode = 0
+shader_parameter/quantize_size = 6
+shader_parameter/handle_scale = false
+shader_parameter/handle_subpixels = false
 shader_parameter/dither_enabled = false
-shader_parameter/bayer_pattern = 1.0
-shader_parameter/divisions = 1.0
+shader_parameter/bayer_pattern = 1
+shader_parameter/divisions = 1
 shader_parameter/contrast = 1.0
 shader_parameter/shift = 0.0
-shader_parameter/grayscale = null
-shader_parameter/use_palette = null
+shader_parameter/grayscale = false
+shader_parameter/use_palette = false
 
 [sub_resource type="ShaderMaterial" id="ShaderMaterial_71etj"]
-shader = ExtResource("1_rp666")
-shader_parameter/quantize_size = 8.0
-shader_parameter/handle_scale = true
-shader_parameter/handle_subpixels = true
+shader = ExtResource("3_eim6d")
+shader_parameter/texture_mode = 0
+shader_parameter/alpha_mode = 0
+shader_parameter/quantize_size = 8
+shader_parameter/handle_scale = false
+shader_parameter/handle_subpixels = false
 shader_parameter/dither_enabled = false
-shader_parameter/bayer_pattern = 1.0
-shader_parameter/divisions = 1.0
+shader_parameter/bayer_pattern = 1
+shader_parameter/divisions = 1
 shader_parameter/contrast = 1.0
 shader_parameter/shift = 0.0
-shader_parameter/grayscale = null
-shader_parameter/use_palette = null
+shader_parameter/grayscale = false
+shader_parameter/use_palette = false
 
 [sub_resource type="ShaderMaterial" id="ShaderMaterial_vg0yh"]
-shader = ExtResource("1_rp666")
-shader_parameter/quantize_size = 5.0
+shader = ExtResource("3_eim6d")
+shader_parameter/texture_mode = 0
+shader_parameter/alpha_mode = 0
+shader_parameter/quantize_size = 4
 shader_parameter/handle_scale = true
 shader_parameter/handle_subpixels = true
 shader_parameter/dither_enabled = true
-shader_parameter/bayer_pattern = 1.0
-shader_parameter/divisions = 1.0
+shader_parameter/bayer_pattern = 1
+shader_parameter/divisions = 1
 shader_parameter/contrast = 1.0
 shader_parameter/shift = 0.0
-shader_parameter/grayscale = null
-shader_parameter/use_palette = null
+shader_parameter/grayscale = false
+shader_parameter/use_palette = false
 
 [sub_resource type="Gradient" id="Gradient_axpb5"]
 offsets = PackedFloat32Array(0, 0.997118)
@@ -56,61 +62,68 @@ fill_to = Vector2(0.15, 0.15)
 
 [sub_resource type="ShaderMaterial" id="ShaderMaterial_a8yss"]
 resource_local_to_scene = true
-shader = ExtResource("1_rp666")
-shader_parameter/quantize_size = 1.0
-shader_parameter/handle_scale = null
-shader_parameter/handle_subpixels = true
-shader_parameter/dither_enabled = false
-shader_parameter/bayer_pattern = 1.0
-shader_parameter/divisions = 1.0
-shader_parameter/contrast = 1.0
-shader_parameter/shift = 0.0
-shader_parameter/grayscale = null
-shader_parameter/use_palette = null
-
-[sub_resource type="ShaderMaterial" id="ShaderMaterial_irwvc"]
-shader = ExtResource("1_rp666")
-shader_parameter/quantize_size = 2.0
+shader = ExtResource("3_eim6d")
+shader_parameter/texture_mode = 0
+shader_parameter/alpha_mode = 0
+shader_parameter/quantize_size = 2
 shader_parameter/handle_scale = true
 shader_parameter/handle_subpixels = true
 shader_parameter/dither_enabled = false
-shader_parameter/bayer_pattern = 1.0
-shader_parameter/divisions = 1.0
+shader_parameter/bayer_pattern = 1
+shader_parameter/divisions = 1
 shader_parameter/contrast = 1.0
 shader_parameter/shift = 0.0
-shader_parameter/grayscale = null
-shader_parameter/use_palette = null
+shader_parameter/grayscale = false
+shader_parameter/use_palette = false
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_irwvc"]
+shader = ExtResource("3_eim6d")
+shader_parameter/texture_mode = 0
+shader_parameter/alpha_mode = 0
+shader_parameter/quantize_size = 1
+shader_parameter/handle_scale = true
+shader_parameter/handle_subpixels = true
+shader_parameter/dither_enabled = false
+shader_parameter/bayer_pattern = 1
+shader_parameter/divisions = 1
+shader_parameter/contrast = 1.0
+shader_parameter/shift = 0.0
+shader_parameter/grayscale = false
+shader_parameter/use_palette = false
 
 [sub_resource type="ShaderMaterial" id="ShaderMaterial_ukdf8"]
-shader = ExtResource("1_rp666")
-shader_parameter/quantize_size = 1.0
-shader_parameter/handle_scale = null
+shader = ExtResource("3_eim6d")
+shader_parameter/texture_mode = 0
+shader_parameter/alpha_mode = 0
+shader_parameter/quantize_size = 1
+shader_parameter/handle_scale = false
 shader_parameter/handle_subpixels = true
 shader_parameter/dither_enabled = false
-shader_parameter/bayer_pattern = 1.0
-shader_parameter/divisions = 1.0
+shader_parameter/bayer_pattern = 1
+shader_parameter/divisions = 1
 shader_parameter/contrast = 1.0
 shader_parameter/shift = 0.0
-shader_parameter/grayscale = null
-shader_parameter/use_palette = null
+shader_parameter/grayscale = false
+shader_parameter/use_palette = false
 
 [sub_resource type="ShaderMaterial" id="ShaderMaterial_xyhaa"]
-shader = ExtResource("1_rp666")
-shader_parameter/quantize_size = 1.0
-shader_parameter/handle_scale = null
+shader = ExtResource("3_eim6d")
+shader_parameter/texture_mode = 0
+shader_parameter/alpha_mode = 0
+shader_parameter/quantize_size = 8
+shader_parameter/handle_scale = false
 shader_parameter/handle_subpixels = true
 shader_parameter/dither_enabled = false
-shader_parameter/bayer_pattern = 1.0
-shader_parameter/divisions = 1.0
+shader_parameter/bayer_pattern = 1
+shader_parameter/divisions = 1
 shader_parameter/contrast = 1.0
 shader_parameter/shift = 0.0
-shader_parameter/grayscale = null
-shader_parameter/use_palette = null
+shader_parameter/grayscale = false
+shader_parameter/use_palette = false
 
 [node name="Node2D" type="Node2D"]
 
 [node name="TextureRect" type="TextureRect" parent="."]
-visible = false
 material = SubResource("ShaderMaterial_rfvq8")
 offset_left = -227.0
 offset_top = -162.0

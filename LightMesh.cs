@@ -11,8 +11,8 @@ public partial class LightMesh : MultiMeshInstance2D
 {
     public LightMesh()
     {
-        _shader ??= new ShaderMaterial() { Shader = GD.Load<Shader>("res://shaders/DitherMesh.gdshader") };
-        _shader.SetShaderParameter("handle_scale", true);
+        _shader ??= new ShaderMaterial() { Shader = GD.Load<Shader>("res://shaders/dither_main.gdshader") };
+        _shader.SetShaderParameter("ignore_scale", true);
         _quadMesh = new() { Size = new(MeshSize, -MeshSize) };
         _multiMesh = new() { Mesh = _quadMesh, UseCustomData = true };
         QuantizeSize = _quantizeSize;
