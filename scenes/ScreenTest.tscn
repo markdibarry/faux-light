@@ -30,8 +30,8 @@ width = 4
 shader = ExtResource("4_ti36b")
 shader_parameter/texture_mode = 1
 shader_parameter/alpha_mode = 0
-shader_parameter/quantize_size = 1
-shader_parameter/ignore_scale = false
+shader_parameter/quantize_size = 2
+shader_parameter/snap_to_world = true
 shader_parameter/limit_subpixels = true
 shader_parameter/dither_enabled = true
 shader_parameter/bayer_pattern = 1
@@ -97,10 +97,9 @@ centered = false
 layout_mode = 2
 
 [node name="ColorRect" type="ColorRect" parent="Control3"]
-texture_filter = 1
 material = SubResource("ShaderMaterial_8qlki")
 layout_mode = 0
-offset_left = 59.0
-offset_top = 37.0
-offset_right = 319.0
-offset_bottom = 237.0
+offset_left = 63.0
+offset_top = 38.0
+offset_right = 323.0
+offset_bottom = 238.0

@@ -18,8 +18,12 @@ uniform int divisions : hint_range(1, 16) = 1;
 uniform float contrast : hint_range(0, 4) = 1.0;
 /**Shifts the colors higher or lower.*/
 uniform float shift : hint_range (-1, 1) = 0;
-/**Turns the resulting image to grayscale.*/
-uniform bool grayscale;
+/**
+0 = Normal: No alpha change
+1 = Alpha black: Outputs alpha as black
+2 = Alpha cut: Cuts textures as a mask. Use within CanvasGroup node.
+*/
+uniform int alpha_mode : hint_range(0,2) = 0;
 /**Switches between arbitrary color reduction and palette based dithering.*/
 uniform bool use_palette;
 /**
@@ -29,11 +33,8 @@ Make sure the width of the GradientTexture1D matches the number of colors.
 uniform sampler2D palette;
 group_uniforms;
 
-varying flat int v_bayer_size;
-varying flat int v_bayer_squared;
-varying float v_inv_bayer_squared;
-varying flat int v_divisions;
-varying float v_inv_divisions;
+varying flat ivec3 v_bayer_data;
+varying flat vec2 v_inv_bayer_data;
 
 const int matrix2[4] = {
     0, 2,
@@ -56,13 +57,14 @@ const int matrix8[64] = {
     63, 31, 55, 23, 61, 29, 53, 21
 };
 
-int getBayerValue(int in_bayer_size, vec2 in_world_vertex) {
+int getBayerValue(vec2 in_world_vertex) {
+    int bayer_size = v_bayer_data.x;
     int q_size = max(v_quant_size, 1);
-    ivec2 iv = ivec2(mod(in_world_vertex, float(in_bayer_size * q_size)));
-    iv /= q_size;
-    int index = iv.x + (iv.y * in_bayer_size);
+    ivec2 cell = ivec2(floor(in_world_vertex / float(q_size)));
+    ivec2 iv = ivec2(cell.x % bayer_size, cell.y % bayer_size);
+    int index = iv.x + iv.y * bayer_size;
 
-    switch (in_bayer_size) {
+    switch (bayer_size) {
         case 2:
             return matrix2[index];
         case 4:
@@ -78,7 +80,7 @@ int getDivisions() {
         pSize /= pSize.y;
         return pSize.x - 1;
     }
-    
+
     return divisions;
 }
 
@@ -101,24 +103,23 @@ vec4 _ditherInternal(vec4 in_c, int in_bayer_value, bool in_cut_alpha) {
     c = (c - 0.5 + shift) * contrast + 0.5;
     c = clamp(c, 0.0, 1.0);
 
+    int bayer_squared = v_bayer_data.y;
+    int adj_divisions = v_bayer_data.z;
+    float inv_bayer_squared = v_inv_bayer_data.x;
+    float inv_divisions = v_inv_bayer_data.y;
     // normalize the dither value
-    float dN = (float(in_bayer_value) * v_inv_bayer_squared) - 0.5;
+    float dN = (float(in_bayer_value) * inv_bayer_squared) - 0.5;
     // get the normalizing value for the division gap
-    float r = v_inv_divisions;
-    float l = r / float(v_bayer_squared * 2);
-
-    c += r * dN + l; // add dither value to color
+    float r = inv_divisions;
+    float l = r / float(bayer_squared * 2);
+    // add dither value to color
+    c += r * dN + l;
     // convert normalized color to quantized range
     // round to nearest available color and normalize again
-    float div = float(v_divisions);
-    c = round(c * div) / div;
+    c = round(c * float(adj_divisions)) * inv_divisions;
 
     if (use_palette) {
         c.rgb = texture(palette, vec2(c.r, 0.5)).rgb;
-    }
-
-    if (grayscale) {
-        c.rgb = vec3((c.r + c.g + c.b) / 3.0);
     }
 
     if (in_cut_alpha) {
@@ -136,28 +137,28 @@ vec4 dither(
     int in_texture_mode,
     int in_alpha_mode
 ) {
-    vec2 world_vertex;
+    vec4 uvResult;
     vec4 c;
-    
+
     switch (in_texture_mode) {
         case 0:
-            c = quantizeTexture(in_texture, in_uv, world_vertex);
+            uvResult = getQuantizeTextureUV(in_uv);
+            c = texture(in_texture, uvResult.xy);
             break;
         case 1:
-            c = quantizeScreen(in_screen_texture, in_screen_uv, v_vertex, world_vertex);
-            break;
-        case 2:
-            c = quantizeMesh(in_texture, in_uv, world_vertex);
+            uvResult = getQuantizeScreenUV(in_screen_uv);
+            c = texture(in_screen_texture, uvResult.xy);
             break;
     }
-    
-    int bayer_value = getBayerValue(v_bayer_size, world_vertex);
+
+    vec2 world_vertex = uvResult.zw;
+    int bayer_value = getBayerValue(world_vertex);
     c = _ditherInternal(c, bayer_value, in_alpha_mode != 0);
-    
+
     if (in_alpha_mode == 2) {
         vec4 bg_c = texture(in_screen_texture, in_screen_uv);
         c = vec4(bg_c.rgb, c.a);
     }
-    
+
     return c;
 }

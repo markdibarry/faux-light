@@ -104,6 +104,7 @@ position = Vector2(205, 181)
 
 [node name="Camera2D" type="Camera2D" parent="GodotBot"]
 ignore_rotation = false
+limit_bottom = 270
 
 [node name="LightSource" type="Node2D" parent="GodotBot"]
 script = ExtResource("5_b4sbi")
