@@ -42,7 +42,7 @@ public partial class LightDisplay : Node2D
         get => _lightHub.Divisions;
         set => _lightHub.Divisions = value;
     }
-    [Export(PropertyHint.Range, "1,3,1")]
+    [Export(PropertyHint.Range, "0,3,1")]
     public int Pattern
     {
         get => _lightHub.Pattern;

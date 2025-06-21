@@ -6,6 +6,8 @@ shader_type canvas_item;
 */
 uniform int texture_mode : hint_range(0,1) = 0;
 
+// This file relies on a quantize shader include file, listed further down.
+// The paths must match your file's location.
 #include "res://shaders/quantize.gdshaderinc"
 
 uniform sampler2D SCREEN_TEXTURE : hint_screen_texture, repeat_disable, filter_nearest;

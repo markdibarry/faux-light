@@ -38,7 +38,6 @@ void vertex() {
         v_alt_matrix = inverse(v_model_matrix);
     }
 
-
     VERTEX = (VERTEX * c_size) * f;
     v_vertex = VERTEX;
     v_texture_data.xy = (1. / TEXTURE_PIXEL_SIZE * c_size) * f;

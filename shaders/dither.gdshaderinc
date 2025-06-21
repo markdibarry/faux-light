@@ -7,7 +7,7 @@ uniform bool dither_enabled = false;
 The Bayer matrix pattern to use
 1 -> 2x2, 2 -> 4x4, 3 -> 8x8
 */
-uniform int bayer_pattern : hint_range(1, 3) = 1;
+uniform int bayer_pattern : hint_range(0, 3) = 1;
 /**
 Specifies the number of times each color channel should be split.
 The higher the number the more colors are allowed. (not applicable if a palette is used)
