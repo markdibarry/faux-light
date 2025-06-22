@@ -159,7 +159,7 @@ script = ExtResource("1_64alp")
 Sources = [NodePath("../../GodotBot/LightSource"), NodePath("../../Fires/Fire2/LightSource"), NodePath("../../Fires/Fire1/LightSource"), NodePath("../../Fires/Fire3/LightSource"), NodePath("../../Fires/Fire4/LightSource")]
 Texture = SubResource("GradientTexture2D_delhg")
 QuantizeSize = 1
-Divisions = 1
+Levels = 1
 Pattern = 1
 Dither = true
 

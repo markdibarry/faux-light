@@ -1,0 +1,12 @@
+[gd_resource type="GradientTexture1D" load_steps=2 format=3 uid="uid://bq7nhb20iq46f"]
+
+[sub_resource type="Gradient" id="Gradient_tchki"]
+interpolation_mode = 1
+offsets = PackedFloat32Array(0, 0.14285715, 0.2857143, 0.42857143, 0.5714286, 0.71428573, 0.85714287, 1)
+colors = PackedColorArray(0, 0, 0, 1, 0, 0, 1, 1, 0, 1, 0, 1, 0, 1, 1, 1, 1, 0, 0, 1, 1, 0, 1, 1, 1, 1, 0, 1, 1, 1, 1, 1)
+metadata/_snap_count = 7
+metadata/_snap_enabled = true
+
+[resource]
+gradient = SubResource("Gradient_tchki")
+width = 8

@@ -1,13 +1,24 @@
 shader_type canvas_item;
-
+group_uniforms Main;
 /**
 0 = Texture: For use with Sprite2Ds, TextureRects, and Meshes
 1 = Screen: For use with ColorRect
 */
-uniform int texture_mode : hint_range(0,1) = 0;
+uniform int texture_mode : hint_range(0, 1) = 0;
+/**
+0 = Normal: No alpha change
+1 = Alpha black: Outputs alpha as black
+2 = Alpha cut: Cuts textures as a mask. Use within CanvasGroup node.
+*/
+uniform int alpha_mode : hint_range(0, 2) = 0;
+group_uniforms;
+
 uniform sampler2D SCREEN_TEXTURE : hint_screen_texture, repeat_disable, filter_nearest;
 
+#include "res://shaders/quantize.gdshaderinc"
 #include "res://shaders/dither.gdshaderinc"
+#include "res://shaders/adjustment.gdshaderinc"
+#include "res://shaders/palette.gdshaderinc"
 
 void vertex() {
     float zoom = length(CANVAS_MATRIX[1].xyz);
@@ -31,12 +42,9 @@ void vertex() {
 
     int bayer_size = 1 << bayer_pattern;
     int bayer_squared = bayer_size * bayer_size;
-    int adj_divisions = getDivisions();
     v_bayer_data.x = bayer_size;
     v_bayer_data.y = bayer_squared;
-    v_bayer_data.z = adj_divisions;
-    v_inv_bayer_data.x = 1.0 / float(bayer_squared);
-    v_inv_bayer_data.y = 1.0 / float(adj_divisions);
+    v_inv_bayer_data = 1.0 / float(bayer_squared);
 
     vec2 local_origin = (MODEL_MATRIX * vec4(0.0, 0.0, 0, 1)).xy;
     vec2 clip = (world_to_clip * vec4(local_origin, 0,1)).xy;
@@ -49,5 +57,39 @@ void vertex() {
 }
 
 void fragment() {
-    COLOR = dither(TEXTURE, UV, SCREEN_TEXTURE, SCREEN_UV, texture_mode, alpha_mode);
+    vec4 color;
+    vec4 uvResult;
+
+    if (texture_mode == 0) {
+        uvResult = getQuantizeTextureUV(UV);
+        color = texture(TEXTURE, uvResult.xy);
+    } else {
+        uvResult = getQuantizeScreenUV(SCREEN_UV);
+        color = texture(SCREEN_TEXTURE, uvResult.xy);
+    }
+
+    // Set alpha as color
+    if (alpha_mode != 0) {
+        color.rgb = vec3(1. - color.a);
+    }
+
+    // Grayscale for palette
+    if (palette_mode == 2 || levels == 1) {
+        color.rgb = vec3(getAverage(color.rgb));
+    }
+
+    color.rgb = adjust(color.rgb);
+    color = dither(color, uvResult.zw, v_quant_size);
+    color = paletteSwap(color, float(levels));
+
+    if (alpha_mode != 0) {
+        // Set color as alpha
+        color = vec4(0, 0, 0, 1. - color.r);
+
+        if (alpha_mode == 2) {
+            color = vec4(texture(SCREEN_TEXTURE, SCREEN_UV).rgb, color.a);
+        }
+    }
+
+    COLOR = color;
 }

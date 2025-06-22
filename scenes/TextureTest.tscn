@@ -1,22 +1,13 @@
-[gd_scene load_steps=9 format=3 uid="uid://biafelirbatgh"]
+[gd_scene load_steps=8 format=3 uid="uid://biafelirbatgh"]
 
 [ext_resource type="Shader" uid="uid://hi601atjjqfb" path="res://shaders/dither_main.gdshader" id="1_ap4am"]
+[ext_resource type="Texture2D" uid="uid://bq7nhb20iq46f" path="res://assets/3bppGradient.tres" id="2_gedrb"]
 [ext_resource type="Texture2D" uid="uid://cv2ophpod6f0" path="res://assets/Pizza-Hat.jpg" id="3_gedrb"]
-
-[sub_resource type="Gradient" id="Gradient_qktcr"]
-offsets = PackedFloat32Array(0, 0.25, 0.75, 1)
-colors = PackedColorArray(7.460266e-07, 0.21754801, 2.4065375e-08, 1, 0.12715036, 0.36126578, 0.20139092, 1, 0.8040047, 0.7552588, 0.31719854, 1, 1, 0.958, 0.79, 1)
-metadata/_snap_enabled = true
-metadata/_snap_count = 4
-
-[sub_resource type="GradientTexture1D" id="GradientTexture1D_j8si7"]
-gradient = SubResource("Gradient_qktcr")
-width = 4
 
 [sub_resource type="ShaderMaterial" id="ShaderMaterial_kbr2t"]
 shader = ExtResource("1_ap4am")
 shader_parameter/texture_mode = 0
-shader_parameter/quantize_size = 8
+shader_parameter/quantize_size = 4
 shader_parameter/snap_to_world = true
 shader_parameter/limit_subpixels = true
 shader_parameter/dither_enabled = true
@@ -25,8 +16,8 @@ shader_parameter/divisions = 1
 shader_parameter/contrast = 1.0
 shader_parameter/shift = 0.0
 shader_parameter/alpha_mode = 0
-shader_parameter/use_palette = true
-shader_parameter/palette = SubResource("GradientTexture1D_j8si7")
+shader_parameter/palette_mode = 0
+shader_parameter/palette = ExtResource("2_gedrb")
 
 [sub_resource type="ShaderMaterial" id="ShaderMaterial_78wix"]
 shader = ExtResource("1_ap4am")
@@ -40,7 +31,7 @@ shader_parameter/divisions = 1
 shader_parameter/contrast = 1.0
 shader_parameter/shift = 0.0
 shader_parameter/alpha_mode = 0
-shader_parameter/use_palette = false
+shader_parameter/palette_mode = 0
 
 [sub_resource type="ArrayMesh" id="ArrayMesh_ejs4y"]
 _surfaces = [{
@@ -68,7 +59,7 @@ shader_parameter/divisions = 1
 shader_parameter/contrast = 1.0
 shader_parameter/shift = 0.0
 shader_parameter/alpha_mode = 0
-shader_parameter/use_palette = false
+shader_parameter/palette_mode = 0
 
 [node name="TextureTest" type="Node2D"]
 
@@ -78,7 +69,6 @@ position = Vector2(-10, -1)
 texture = ExtResource("3_gedrb")
 centered = false
 flip_h = true
-flip_v = true
 
 [node name="PizzaHat2" type="MeshInstance2D" parent="."]
 material = SubResource("ShaderMaterial_78wix")
@@ -94,3 +84,4 @@ offset_right = 1743.0
 offset_bottom = 626.0
 texture = ExtResource("3_gedrb")
 flip_h = true
+flip_v = true

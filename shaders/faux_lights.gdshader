@@ -1,12 +1,8 @@
 shader_type canvas_item;
 
-/**
-0 = Texture: For use with Sprite2Ds, TextureRects, and Meshes
-1 = Screen: For use with ColorRect
-*/
-uniform int texture_mode : hint_range(0,1) = 0;
 uniform sampler2D SCREEN_TEXTURE : hint_screen_texture, filter_nearest;
 
+#include "res://shaders/quantize.gdshaderinc"
 #include "res://shaders/dither.gdshaderinc"
 
 float triangle(float time, float speed) {
@@ -27,16 +23,7 @@ void vertex() {
     float zoom = length(CANVAS_MATRIX[1].xyz);
     v_quant_size = getQuantizeSize(zoom);
     v_model_matrix = MODEL_MATRIX;
-
-    if (texture_mode == 1) {
-        v_alt_matrix = SCREEN_MATRIX * CANVAS_MATRIX;
-
-        if (snap_to_world) {
-            v_alt_matrix = inverse(v_alt_matrix);
-        }
-    } else {
-        v_alt_matrix = inverse(v_model_matrix);
-    }
+    v_alt_matrix = inverse(MODEL_MATRIX);
 
     VERTEX = (VERTEX * c_size) * f;
     v_vertex = VERTEX;
@@ -45,14 +32,20 @@ void vertex() {
 
     int bayer_size = 1 << bayer_pattern;
     int bayer_squared = bayer_size * bayer_size;
-    int adj_divisions = getDivisions();
     v_bayer_data.x = bayer_size;
     v_bayer_data.y = bayer_squared;
-    v_bayer_data.z = adj_divisions;
-    v_inv_bayer_data.x = 1.0 / float(bayer_squared);
-    v_inv_bayer_data.y = 1.0 / float(adj_divisions);
+    v_inv_bayer_data = 1.0 / float(bayer_squared);
 }
 
 void fragment() {
-    COLOR = dither(TEXTURE, UV, SCREEN_TEXTURE, SCREEN_UV, texture_mode, alpha_mode);
+    vec4 uvResult = getQuantizeTextureUV(UV);
+    vec4 color = texture(TEXTURE, uvResult.xy);
+    // Set alpha as color
+    color.rgb = vec3(1. - color.a);
+    color = dither(color, uvResult.zw, v_quant_size);
+    // Set color as alpha
+    color = vec4(0, 0, 0, 1. - color.r);
+    // Show background in cutout
+    color = vec4(texture(SCREEN_TEXTURE, SCREEN_UV).rgb, color.a);
+    COLOR = color;
 }

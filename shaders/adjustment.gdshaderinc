@@ -1,0 +1,23 @@
+group_uniforms Adjustment;
+/**Modifies the contrast of the image.*/
+uniform float contrast : hint_range(0, 4) = 1.0;
+/**Shifts the colors higher or lower.*/
+uniform float brightness : hint_range (-1, 1) = 0;
+/**
+0 = luminance average
+1 = average
+*/
+uniform float average : hint_range(0.,1.) = 0;
+group_uniforms;
+
+const vec3 lum = vec3(0.2126, 0.7152, 0.0722);
+
+vec3 adjust(vec3 in_c) {
+    return (in_c - 0.5 + brightness) * contrast + 0.5;
+}
+
+float getAverage(vec3 in_color) {
+    float avg = (in_color.r + in_color.g + in_color.b) * 0.3333;
+    float lum_avg = dot(in_color, lum);
+    return mix(lum_avg, avg, average);
+}

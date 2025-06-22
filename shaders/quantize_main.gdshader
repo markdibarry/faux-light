@@ -41,19 +41,11 @@ void vertex() {
 }
 
 void fragment() {
-    vec4 c;
-    vec4 uv_result;
-
-    switch (texture_mode) {
-        case 0:
-            uv_result = getQuantizeTextureUV(UV);
-            c = texture(TEXTURE, uv_result.xy);
-            break;
-        case 1:
-            uv_result = getQuantizeScreenUV(SCREEN_UV);
-            c = texture(SCREEN_TEXTURE, uv_result.xy);
-            break;
+    if (texture_mode == 0) {
+        vec4 uvResult = getQuantizeTextureUV(UV);
+        COLOR = texture(TEXTURE, uvResult.xy);
+    } else {
+        vec4 uvResult = getQuantizeScreenUV(SCREEN_UV);
+        COLOR = texture(SCREEN_TEXTURE, uvResult.xy);
     }
-
-    COLOR = c;
 }

@@ -1,9 +1,10 @@
-[gd_scene load_steps=11 format=3 uid="uid://cqwpsw4ty31vk"]
+[gd_scene load_steps=10 format=3 uid="uid://cqwpsw4ty31vk"]
 
 [ext_resource type="Shader" uid="uid://d3r3ybmnn13m2" path="res://shaders/color_uv_demo.gdshader" id="1_3clgq"]
 [ext_resource type="Texture2D" uid="uid://c12kj1yjl0hs3" path="res://assets/icon.svg" id="1_e3ywq"]
 [ext_resource type="Texture2D" uid="uid://dhoyvu2djof2l" path="res://assets/3DShapes.png" id="2_0ytmu"]
 [ext_resource type="Shader" uid="uid://hi601atjjqfb" path="res://shaders/dither_main.gdshader" id="4_ti36b"]
+[ext_resource type="Texture2D" uid="uid://dlf0n2jyv1cun" path="res://assets/gameboyGradient.tres" id="5_nqncu"]
 
 [sub_resource type="ShaderMaterial" id="ShaderMaterial_7elxo"]
 shader = ExtResource("1_3clgq")
@@ -17,30 +18,21 @@ gradient = SubResource("Gradient_thdm0")
 fill_from = Vector2(1, 0)
 fill_to = Vector2(1, 1)
 
-[sub_resource type="Gradient" id="Gradient_tchki"]
-offsets = PackedFloat32Array(0, 0.06666667, 0.13333334, 0.2, 0.26666668, 0.33333334, 0.4, 0.46666667, 0.53333336, 0.6, 0.6666667, 0.73333335, 0.8, 0.8666667, 0.93333334, 1)
-colors = PackedColorArray(0.2784314, 0.5529412, 0.7529412, 1, 0.36225003, 0.315, 0.63, 1, 0.55, 0.3575, 0, 1, 0.96862745, 0.43137255, 0, 1, 0.9843137, 0.9647059, 0, 1, 0.97748107, 0.67529505, 0.79208905, 1, 1, 1, 1, 1, 1, 0, 0, 1, 0.0666666, 0, 1, 1, 0.919, 1, 0.81999993, 1, 0, 0, 0, 1, 0.6091666, 1, 0.32999998, 1, 1, 0.32999998, 0.88833344, 1, 0, 0.63333344, 1, 1, 0, 1, 0.8666668, 1, 0.2625, 0.35, 0.33541662, 1)
-metadata/_snap_enabled = true
-metadata/_snap_count = 15
-
-[sub_resource type="GradientTexture1D" id="GradientTexture1D_c4c0a"]
-gradient = SubResource("Gradient_tchki")
-width = 16
-
 [sub_resource type="ShaderMaterial" id="ShaderMaterial_8qlki"]
 shader = ExtResource("4_ti36b")
 shader_parameter/texture_mode = 1
+shader_parameter/alpha_mode = 0
 shader_parameter/quantize_size = 1
-shader_parameter/snap_to_world = false
+shader_parameter/snap_to_world = true
 shader_parameter/limit_subpixels = true
 shader_parameter/dither_enabled = true
 shader_parameter/bayer_pattern = 1
-shader_parameter/divisions = 1
+shader_parameter/levels = 2
 shader_parameter/contrast = 1.0
-shader_parameter/shift = 4.75e-08
-shader_parameter/alpha_mode = 0
-shader_parameter/use_palette = false
-shader_parameter/palette = SubResource("GradientTexture1D_c4c0a")
+shader_parameter/brightness = 0.0
+shader_parameter/average = 0.0
+shader_parameter/palette_mode = 0
+shader_parameter/palette = ExtResource("5_nqncu")
 
 [node name="Control" type="MarginContainer"]
 anchors_preset = 15
@@ -99,7 +91,7 @@ layout_mode = 2
 [node name="ColorRect" type="ColorRect" parent="Control3"]
 material = SubResource("ShaderMaterial_8qlki")
 layout_mode = 0
-offset_left = 68.0
-offset_top = 26.0
-offset_right = 328.0
-offset_bottom = 226.0
+offset_left = 52.0
+offset_top = 22.0
+offset_right = 312.0
+offset_bottom = 245.0

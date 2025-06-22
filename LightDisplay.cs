@@ -10,8 +10,6 @@ public partial class LightDisplay : Node2D
     {
         var shader = new ShaderMaterial() { Shader = GD.Load<Shader>("res://shaders/faux_lights.gdshader") };
         shader.SetShaderParameter("snap_to_world", true);
-        shader.SetShaderParameter("texture_mode", 0);
-        shader.SetShaderParameter("alpha_mode", 2);
         _lightHub = new(shader);
         BackBufferCopy backBufferCopy = new() { CopyMode = BackBufferCopy.CopyModeEnum.Viewport };
         AddChild(backBufferCopy);
@@ -37,10 +35,10 @@ public partial class LightDisplay : Node2D
         set => _lightHub.QuantizeSize = value;
     }
     [Export(PropertyHint.Range, "1,16,1")]
-    public int Divisions
+    public int Levels
     {
-        get => _lightHub.Divisions;
-        set => _lightHub.Divisions = value;
+        get => _lightHub.Levels;
+        set => _lightHub.Levels = value;
     }
     [Export(PropertyHint.Range, "0,3,1")]
     public int Pattern
@@ -77,7 +75,7 @@ public partial class LightDisplay : Node2D
     public override bool _PropertyCanRevert(StringName property)
     {
         if (property == PropertyName.Dither ||
-            property == PropertyName.Divisions ||
+            property == PropertyName.Levels ||
             property == PropertyName.Pattern ||
             property == PropertyName.QuantizeSize)
         {
@@ -91,7 +89,7 @@ public partial class LightDisplay : Node2D
     {
         if (property == PropertyName.Dither)
             return false;
-        else if (property == PropertyName.Divisions)
+        else if (property == PropertyName.Levels)
             return 1;
         else if (property == PropertyName.Pattern)
             return 1;

@@ -1,5 +1,3 @@
-#include "res://shaders/quantize.gdshaderinc"
-
 group_uniforms Dithering;
 /**Turns the dithering on or off.*/
 uniform bool dither_enabled = false;
@@ -13,28 +11,12 @@ Specifies the number of times each color channel should be split.
 The higher the number the more colors are allowed. (not applicable if a palette is used)
 1 is 3bpp or 8 colors, 2 is 4bpp or 16 colors, etc.
 */
-uniform int divisions : hint_range(1, 16) = 1;
-/**Modifies the contrast of the image.*/
-uniform float contrast : hint_range(0, 4) = 1.0;
-/**Shifts the colors higher or lower.*/
-uniform float shift : hint_range (-1, 1) = 0;
-/**
-0 = Normal: No alpha change
-1 = Alpha black: Outputs alpha as black
-2 = Alpha cut: Cuts textures as a mask. Use within CanvasGroup node.
-*/
-uniform int alpha_mode : hint_range(0,2) = 0;
-/**Switches between arbitrary color reduction and palette based dithering.*/
-uniform bool use_palette;
-/**
-A palette image or a GradientTexture1D for realtime editing.
-Make sure the width of the GradientTexture1D matches the number of colors.
-*/
-uniform sampler2D palette;
+uniform int levels : hint_range(1, 128) = 2;
+
 group_uniforms;
 
-varying flat ivec3 v_bayer_data;
-varying flat vec2 v_inv_bayer_data;
+varying flat ivec2 v_bayer_data;
+varying flat float v_inv_bayer_data;
 
 const int matrix2[4] = {
     0, 2,
@@ -57,9 +39,9 @@ const int matrix8[64] = {
     63, 31, 55, 23, 61, 29, 53, 21
 };
 
-int getBayerValue(vec2 in_world_vertex) {
+int getBayerValue(vec2 in_world_vertex, int in_quant_size) {
     int bayer_size = v_bayer_data.x;
-    int q_size = max(v_quant_size, 1);
+    int q_size = max(in_quant_size, 1);
     ivec2 cell = ivec2(floor(in_world_vertex / float(q_size)));
     ivec2 iv = ivec2(cell.x % bayer_size, cell.y % bayer_size);
     int index = iv.x + iv.y * bayer_size;
@@ -74,91 +56,33 @@ int getBayerValue(vec2 in_world_vertex) {
     }
 }
 
-int getDivisions() {
-    if (use_palette) {
-        ivec2 pSize = textureSize(palette, 0);
-        pSize /= pSize.y;
-        return pSize.x - 1;
-    }
-
-    return divisions;
-}
-
-vec4 _ditherInternal(vec4 in_c, int in_bayer_value, bool in_cut_alpha) {
-    if (!dither_enabled) {
-        return in_c;
-    }
-
-    vec4 c = in_c;
-
-    if (in_cut_alpha) {
-        c.rgb = vec3(1. - c.a);
-    }
-
-    if (use_palette) {
-        c.rgb = vec3((c.r * 0.299) + (c.g * 0.587) + (c.b * 0.114));
-    }
-
-    // add contrast and shift
-    c = (c - 0.5 + shift) * contrast + 0.5;
-    c = clamp(c, 0.0, 1.0);
+vec4 _ditherInternal(vec4 in_c, int in_bayer_value) {
+    vec3 c = in_c.rgb;
+    float a = in_c.a;
 
     int bayer_squared = v_bayer_data.y;
-    int adj_divisions = v_bayer_data.z;
-    float inv_bayer_squared = v_inv_bayer_data.x;
-    float inv_divisions = v_inv_bayer_data.y;
+    float inv_bayer_squared = v_inv_bayer_data;
+    float levels_f = max(float(levels) - 1., 1.);
+
     // normalize the dither value
     float dN = (float(in_bayer_value) * inv_bayer_squared) - 0.5;
     // get the normalizing value for the division gap
-    float r = inv_divisions;
+    float r = 1. / levels_f;
     float l = r / float(bayer_squared * 2);
     // add dither value to color
     c += r * dN + l;
     // convert normalized color to quantized range
-    // round to nearest available color and normalize again
-    c = round(c * float(adj_divisions)) * inv_divisions;
-
-    if (use_palette) {
-        c.rgb = texture(palette, vec2(c.r, 0.5)).rgb;
-    }
-
-    if (in_cut_alpha) {
-        return vec4(vec3(0), 1. - c.r);
-    }
-
-    return vec4(c.rgb, c.a);
+    c *= levels_f;
+    return vec4(round(c) / levels_f, a);
 }
 
-vec4 dither(
-    sampler2D in_texture,
-    vec2 in_uv,
-    sampler2D in_screen_texture,
-    vec2 in_screen_uv,
-    int in_texture_mode,
-    int in_alpha_mode
-) {
-    vec4 uvResult;
-    vec4 c;
-
-    switch (in_texture_mode) {
-        case 0:
-            uvResult = getQuantizeTextureUV(in_uv);
-            c = texture(in_texture, uvResult.xy);
-            break;
-        case 1:
-            uvResult = getQuantizeScreenUV(in_screen_uv);
-            c = texture(in_screen_texture, uvResult.xy);
-            break;
+vec4 dither(vec4 in_color, vec2 in_world_vertex, int in_quant_size) {
+    if (!dither_enabled) {
+        return in_color;
     }
 
-    vec2 world_vertex = uvResult.zw;
-    int bayer_value = getBayerValue(world_vertex);
-    c = _ditherInternal(c, bayer_value, in_alpha_mode != 0);
+    int bayer_value = getBayerValue(in_world_vertex, in_quant_size);
+    vec4 color = _ditherInternal(in_color, bayer_value);
 
-    if (in_alpha_mode == 2) {
-        vec4 bg_c = texture(in_screen_texture, in_screen_uv);
-        c = vec4(bg_c.rgb, c.a);
-    }
-
-    return c;
+    return color;
 }

@@ -1,7 +1,8 @@
-[gd_scene load_steps=9 format=3 uid="uid://2p4nl1xbl2tf"]
+[gd_scene load_steps=8 format=3 uid="uid://2p4nl1xbl2tf"]
 
 [ext_resource type="Texture2D" uid="uid://c12kj1yjl0hs3" path="res://assets/icon.svg" id="1_udjrh"]
 [ext_resource type="Shader" uid="uid://hi601atjjqfb" path="res://shaders/dither_main.gdshader" id="2_74uks"]
+[ext_resource type="Texture2D" uid="uid://dlf0n2jyv1cun" path="res://assets/gameboyGradient.tres" id="3_c7x75"]
 
 [sub_resource type="Animation" id="Animation_nrdq4"]
 length = 0.001
@@ -89,20 +90,9 @@ _data = {
 &"new_animation": SubResource("Animation_tj0xl")
 }
 
-[sub_resource type="Gradient" id="Gradient_mkl6m"]
-offsets = PackedFloat32Array(0, 0.333333, 0.666667, 1)
-colors = PackedColorArray(0.0819, 0.24622, 0.39, 1, 0.2597, 0.53, 0.282225, 1, 0.65, 0.78, 0.39, 1, 0.955667, 1, 0.81, 1)
-metadata/_snap_count = 3
-metadata/_snap_enabled = true
-
-[sub_resource type="GradientTexture1D" id="GradientTexture1D_go1wt"]
-gradient = SubResource("Gradient_mkl6m")
-width = 4
-
 [sub_resource type="ShaderMaterial" id="ShaderMaterial_wxh1w"]
 shader = ExtResource("2_74uks")
 shader_parameter/texture_mode = 1
-shader_parameter/alpha_mode = 0
 shader_parameter/quantize_size = 2
 shader_parameter/snap_to_world = false
 shader_parameter/limit_subpixels = true
@@ -111,9 +101,9 @@ shader_parameter/bayer_pattern = 1
 shader_parameter/divisions = 1
 shader_parameter/contrast = 1.0
 shader_parameter/shift = 0.0
-shader_parameter/grayscale = false
-shader_parameter/use_palette = false
-shader_parameter/palette = SubResource("GradientTexture1D_go1wt")
+shader_parameter/alpha_mode = 0
+shader_parameter/palette_mode = 1
+shader_parameter/palette = ExtResource("3_c7x75")
 
 [node name="Node3D" type="Node3D"]
 

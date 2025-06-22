@@ -13,13 +13,11 @@ public partial class LightMesh : MultiMeshInstance2D
     {
         _shader ??= new ShaderMaterial() { Shader = GD.Load<Shader>("res://shaders/dither_main.gdshader") };
         _shader.SetShaderParameter("snap_to_world", true);
-        _shader.SetShaderParameter("texture_mode", 0);
-        _shader.SetShaderParameter("alpha_mode", 2);
         _quadMesh = new() { Size = new(MeshSize, -MeshSize) };
         _multiMesh = new() { Mesh = _quadMesh, UseCustomData = true };
         QuantizeSize = _quantizeSize;
         Dither = _dither;
-        Divisions = _divisions;
+        Levels = _levels;
         Pattern = _pattern;
         Texture ??= GetDefaultTexture();
     }
@@ -53,13 +51,13 @@ public partial class LightMesh : MultiMeshInstance2D
         }
     }
     [Export(PropertyHint.Range, "1,16,1")]
-    public int Divisions
+    public int Levels
     {
-        get => _divisions;
+        get => _levels;
         set
         {
-            _divisions = value;
-            _shader.SetShaderParameter("divisions", value);
+            _levels = value;
+            _shader.SetShaderParameter("levels", value);
         }
     }
     [Export(PropertyHint.Range, "1,3,1")]
@@ -93,7 +91,7 @@ public partial class LightMesh : MultiMeshInstance2D
     private Texture2D? _texture;
     private int _quantizeSize = 1;
     private bool _dither = false;
-    private int _divisions = 1;
+    private int _levels = 1;
     private int _pattern = 1;
 
     /// <summary>
