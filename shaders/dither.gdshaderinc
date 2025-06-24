@@ -5,18 +5,14 @@ uniform bool dither_enabled = false;
 The Bayer matrix pattern to use
 1 -> 2x2, 2 -> 4x4, 3 -> 8x8
 */
-uniform int bayer_pattern : hint_range(0, 3) = 1;
+uniform int dither_pattern : hint_range(0, 3) = 1;
 /**
 Specifies the number of times each color channel should be split.
 The higher the number the more colors are allowed. (not applicable if a palette is used)
 1 is 3bpp or 8 colors, 2 is 4bpp or 16 colors, etc.
 */
 uniform int levels : hint_range(1, 128) = 2;
-
 group_uniforms;
-
-varying flat ivec2 v_bayer_data;
-varying flat float v_inv_bayer_data;
 
 const int matrix2[4] = {
     0, 2,
@@ -39,10 +35,8 @@ const int matrix8[64] = {
     63, 31, 55, 23, 61, 29, 53, 21
 };
 
-int getBayerValue(vec2 in_world_vertex, int in_quant_size) {
-    int bayer_size = v_bayer_data.x;
-    int q_size = max(in_quant_size, 1);
-    ivec2 cell = ivec2(floor(in_world_vertex / float(q_size)));
+int _getBayer(ivec2 cell) {
+    int bayer_size = 1 << dither_pattern;
     ivec2 iv = ivec2(cell.x % bayer_size, cell.y % bayer_size);
     int index = iv.x + iv.y * bayer_size;
 
@@ -56,24 +50,31 @@ int getBayerValue(vec2 in_world_vertex, int in_quant_size) {
     }
 }
 
-vec4 _ditherInternal(vec4 in_c, int in_bayer_value) {
+int _getDitherValue(vec2 in_world_vertex, int in_quant_size) {
+    int q_size = max(in_quant_size, 1);
+    ivec2 cell = ivec2(floor(in_world_vertex / float(q_size)));
+    return _getBayer(cell);
+}
+
+vec4 _ditherInternal(vec4 in_c, int in_dither_value) {
     vec3 c = in_c.rgb;
     float a = in_c.a;
 
-    int bayer_squared = v_bayer_data.y;
-    float inv_bayer_squared = v_inv_bayer_data;
+    float bayer_size = float(1 << dither_pattern);
+    float inv_bayer_squared = 1. / (bayer_size * bayer_size);
     float levels_f = max(float(levels) - 1., 1.);
+    float inv_levels_f = 1. / levels_f;
 
     // normalize the dither value
-    float dN = (float(in_bayer_value) * inv_bayer_squared) - 0.5;
+    float dN = (float(in_dither_value) * inv_bayer_squared) - 0.5;
     // get the normalizing value for the division gap
-    float r = 1. / levels_f;
-    float l = r / float(bayer_squared * 2);
+    float r = inv_levels_f;
+    float l = r * (inv_bayer_squared * 0.5);
     // add dither value to color
     c += r * dN + l;
     // convert normalized color to quantized range
-    c *= levels_f;
-    return vec4(round(c) / levels_f, a);
+    c = round(c * levels_f) * inv_levels_f;
+    return vec4(c, a);
 }
 
 vec4 dither(vec4 in_color, vec2 in_world_vertex, int in_quant_size) {
@@ -81,8 +82,8 @@ vec4 dither(vec4 in_color, vec2 in_world_vertex, int in_quant_size) {
         return in_color;
     }
 
-    int bayer_value = getBayerValue(in_world_vertex, in_quant_size);
-    vec4 color = _ditherInternal(in_color, bayer_value);
+    int dither_value = _getDitherValue(in_world_vertex, in_quant_size);
+    vec4 color = _ditherInternal(in_color, dither_value);
 
     return color;
 }

@@ -1,36 +1,36 @@
-[gd_scene load_steps=8 format=3 uid="uid://biafelirbatgh"]
+[gd_scene load_steps=7 format=3 uid="uid://biafelirbatgh"]
 
 [ext_resource type="Shader" uid="uid://hi601atjjqfb" path="res://shaders/dither_main.gdshader" id="1_ap4am"]
-[ext_resource type="Texture2D" uid="uid://bq7nhb20iq46f" path="res://assets/3bppGradient.tres" id="2_gedrb"]
 [ext_resource type="Texture2D" uid="uid://cv2ophpod6f0" path="res://assets/Pizza-Hat.jpg" id="3_gedrb"]
 
 [sub_resource type="ShaderMaterial" id="ShaderMaterial_kbr2t"]
 shader = ExtResource("1_ap4am")
 shader_parameter/texture_mode = 0
+shader_parameter/alpha_mode = 0
 shader_parameter/quantize_size = 4
 shader_parameter/snap_to_world = true
 shader_parameter/limit_subpixels = true
 shader_parameter/dither_enabled = true
-shader_parameter/bayer_pattern = 1
-shader_parameter/divisions = 1
+shader_parameter/dither_pattern = 1
+shader_parameter/levels = 2
 shader_parameter/contrast = 1.0
-shader_parameter/shift = 0.0
-shader_parameter/alpha_mode = 0
+shader_parameter/brightness = 0.0
+shader_parameter/average = 0.0
 shader_parameter/palette_mode = 0
-shader_parameter/palette = ExtResource("2_gedrb")
 
 [sub_resource type="ShaderMaterial" id="ShaderMaterial_78wix"]
 shader = ExtResource("1_ap4am")
 shader_parameter/texture_mode = 0
+shader_parameter/alpha_mode = 0
 shader_parameter/quantize_size = 16
 shader_parameter/snap_to_world = true
 shader_parameter/limit_subpixels = false
 shader_parameter/dither_enabled = false
-shader_parameter/bayer_pattern = 1
-shader_parameter/divisions = 1
+shader_parameter/dither_pattern = 1
+shader_parameter/levels = 2
 shader_parameter/contrast = 1.0
-shader_parameter/shift = 0.0
-shader_parameter/alpha_mode = 0
+shader_parameter/brightness = 0.0
+shader_parameter/average = 0.0
 shader_parameter/palette_mode = 0
 
 [sub_resource type="ArrayMesh" id="ArrayMesh_ejs4y"]
@@ -50,15 +50,16 @@ _surfaces = [{
 [sub_resource type="ShaderMaterial" id="ShaderMaterial_ap4am"]
 shader = ExtResource("1_ap4am")
 shader_parameter/texture_mode = 0
+shader_parameter/alpha_mode = 0
 shader_parameter/quantize_size = 8
 shader_parameter/snap_to_world = true
 shader_parameter/limit_subpixels = true
 shader_parameter/dither_enabled = true
-shader_parameter/bayer_pattern = 1
-shader_parameter/divisions = 1
+shader_parameter/dither_pattern = 1
+shader_parameter/levels = 2
 shader_parameter/contrast = 1.0
-shader_parameter/shift = 0.0
-shader_parameter/alpha_mode = 0
+shader_parameter/brightness = 0.0
+shader_parameter/average = 0.0
 shader_parameter/palette_mode = 0
 
 [node name="TextureTest" type="Node2D"]

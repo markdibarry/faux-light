@@ -93,15 +93,16 @@ _data = {
 [sub_resource type="ShaderMaterial" id="ShaderMaterial_wxh1w"]
 shader = ExtResource("2_74uks")
 shader_parameter/texture_mode = 1
+shader_parameter/alpha_mode = 0
 shader_parameter/quantize_size = 2
 shader_parameter/snap_to_world = false
 shader_parameter/limit_subpixels = true
 shader_parameter/dither_enabled = true
-shader_parameter/bayer_pattern = 1
-shader_parameter/divisions = 1
+shader_parameter/dither_pattern = 1
+shader_parameter/levels = 4
 shader_parameter/contrast = 1.0
-shader_parameter/shift = 0.0
-shader_parameter/alpha_mode = 0
+shader_parameter/brightness = 0.0
+shader_parameter/average = 0.0
 shader_parameter/palette_mode = 1
 shader_parameter/palette = ExtResource("3_c7x75")
 

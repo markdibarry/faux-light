@@ -4,8 +4,8 @@
 interpolation_mode = 1
 offsets = PackedFloat32Array(0, 0.33333334, 0.6666667, 1)
 colors = PackedColorArray(0.03137255, 0.09411765, 0.1254902, 1, 0.20392156, 0.40784314, 0.3372549, 1, 0.53333336, 0.7529412, 0.4392157, 1, 0.8784314, 0.972549, 0.8156863, 1)
-metadata/_snap_enabled = true
 metadata/_snap_count = 3
+metadata/_snap_enabled = true
 
 [resource]
 gradient = SubResource("Gradient_23qmh")

@@ -10,7 +10,8 @@ float triangle(float time, float speed) {
 }
 
 void vertex() {
-    float fps = 1. / 12.0;
+    // Change to adjust FPS
+    float fps = 1. / 10.0;
     float time = floor(TIME / fps) * fps;
     float c_speed = INSTANCE_CUSTOM.r;
     float c_size = INSTANCE_CUSTOM.g;
@@ -28,13 +29,8 @@ void vertex() {
     VERTEX = (VERTEX * c_size) * f;
     v_vertex = VERTEX;
     v_texture_data.xy = (1. / TEXTURE_PIXEL_SIZE * c_size) * f;
+    // Is texture flipped
     v_texture_data.zw = max(-sign((UV - 0.5) * VERTEX), 0.);
-
-    int bayer_size = 1 << bayer_pattern;
-    int bayer_squared = bayer_size * bayer_size;
-    v_bayer_data.x = bayer_size;
-    v_bayer_data.y = bayer_squared;
-    v_inv_bayer_data = 1.0 / float(bayer_squared);
 }
 
 void fragment() {
