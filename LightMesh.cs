@@ -67,7 +67,7 @@ public partial class LightMesh : MultiMeshInstance2D
         set
         {
             _pattern = value;
-            _shader.SetShaderParameter("bayer_pattern", value);
+            _shader.SetShaderParameter("dither_pattern", value);
         }
     }
     [Export]
