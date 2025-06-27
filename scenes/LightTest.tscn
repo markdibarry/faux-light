@@ -1,11 +1,11 @@
-[gd_scene load_steps=18 format=4 uid="uid://brfv1wjn3c4tv"]
+[gd_scene load_steps=19 format=4 uid="uid://brfv1wjn3c4tv"]
 
-[ext_resource type="Script" uid="uid://bb5hk0ox43qsi" path="res://LightDisplay.cs" id="1_64alp"]
 [ext_resource type="Texture2D" uid="uid://c2hyvlockg1x2" path="res://assets/forest/Layer_0000_9.png" id="2_288un"]
 [ext_resource type="Texture2D" uid="uid://ds4y4kxcgmo0e" path="res://assets/forest/Layer_0001_8.png" id="3_tfvc6"]
-[ext_resource type="Script" uid="uid://dcpnome5to4w1" path="res://LightSource.cs" id="5_b4sbi"]
 [ext_resource type="PackedScene" uid="uid://ce2osusyvrwik" path="res://scenes/GodotBot.tscn" id="5_tjmol"]
+[ext_resource type="Shader" uid="uid://cmjey3p3cghoq" path="res://shaders/faux_lights.gdshader" id="6_rm8x0"]
 [ext_resource type="Texture2D" uid="uid://bvqsov7ujjxqs" path="res://assets/block.png" id="7_d8k31"]
+[ext_resource type="Script" uid="uid://d0tq4244v8uaw" path="res://FauxLight.cs" id="7_rm8x0"]
 [ext_resource type="Texture2D" uid="uid://oint6tcqmh8" path="res://assets/fire/Fire_Spreadsheet.png" id="8_qhqgi"]
 [ext_resource type="Texture2D" uid="uid://k1o6bmlaxuns" path="res://assets/forest/Layer_0005_5.png" id="9_hacek"]
 
@@ -17,6 +17,28 @@ texture = ExtResource("7_d8k31")
 [sub_resource type="TileSet" id="TileSet_6brs3"]
 physics_layer_0/collision_layer = 1
 sources/0 = SubResource("TileSetAtlasSource_0esiw")
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_ukqpv"]
+shader = ExtResource("6_rm8x0")
+shader_parameter/mask = true
+shader_parameter/quantize_size = 1
+shader_parameter/snap_to_world = true
+shader_parameter/limit_subpixels = true
+shader_parameter/dither_enabled = true
+shader_parameter/dither_pattern = 1
+shader_parameter/levels = 2
+
+[sub_resource type="Gradient" id="Gradient_rrsvi"]
+offsets = PackedFloat32Array(0.5, 1)
+colors = PackedColorArray(0, 0, 0, 1, 0, 0, 0, 0)
+
+[sub_resource type="GradientTexture2D" id="GradientTexture2D_w80ca"]
+gradient = SubResource("Gradient_rrsvi")
+width = 100
+height = 100
+fill = 1
+fill_from = Vector2(0.5, 0.5)
+fill_to = Vector2(0.15, 0.15)
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_7vpxa"]
 atlas = ExtResource("8_qhqgi")
@@ -59,19 +81,6 @@ animations = [{
 "speed": 5.0
 }]
 
-[sub_resource type="Gradient" id="Gradient_0bvsy"]
-offsets = PackedFloat32Array(0.5, 1)
-colors = PackedColorArray(0, 0, 0, 1, 0, 0, 0, 0)
-metadata/_snap_enabled = true
-
-[sub_resource type="GradientTexture2D" id="GradientTexture2D_delhg"]
-gradient = SubResource("Gradient_0bvsy")
-width = 50
-height = 50
-fill = 1
-fill_from = Vector2(0.5, 0.5)
-fill_to = Vector2(0.15, 0.15)
-
 [node name="LightTest" type="Node"]
 
 [node name="Backgrounds" type="Node2D" parent="."]
@@ -86,12 +95,12 @@ offset_bottom = 300.0
 color = Color(0.1632, 0.21808, 0.32, 1)
 
 [node name="FarBackground" type="Sprite2D" parent="Backgrounds"]
-position = Vector2(0, -500)
+position = Vector2(0, -550)
 texture = ExtResource("2_288un")
 centered = false
 
 [node name="NearBackground" type="Sprite2D" parent="Backgrounds"]
-position = Vector2(0, -460)
+position = Vector2(0, -490)
 texture = ExtResource("3_tfvc6")
 centered = false
 
@@ -107,10 +116,18 @@ position = Vector2(205, 181)
 ignore_rotation = false
 limit_bottom = 270
 
-[node name="LightSource" type="Node2D" parent="GodotBot"]
-script = ExtResource("5_b4sbi")
-MaxSize = 200
-Speed = 0.5
+[node name="FauxLight" type="Sprite2D" parent="GodotBot"]
+z_index = 1
+texture_filter = 2
+material = SubResource("ShaderMaterial_ukqpv")
+instance_shader_parameters/speed = 0.3
+scale = Vector2(2, 2)
+texture = SubResource("GradientTexture2D_w80ca")
+script = ExtResource("7_rm8x0")
+Mask = true
+Speed = 0.3
+Dither = true
+metadata/_custom_type_script = "uid://d0tq4244v8uaw"
 
 [node name="Fires" type="Node2D" parent="."]
 
@@ -120,9 +137,17 @@ sprite_frames = SubResource("SpriteFrames_0wykd")
 animation = &"new_animation"
 autoplay = "new_animation"
 
-[node name="LightSource" type="Node2D" parent="Fires/Fire1"]
-script = ExtResource("5_b4sbi")
-Speed = 1.0
+[node name="FauxLight" type="Sprite2D" parent="Fires/Fire1"]
+z_index = 1
+texture_filter = 2
+material = SubResource("ShaderMaterial_ukqpv")
+instance_shader_parameters/speed = 0.15
+texture = SubResource("GradientTexture2D_w80ca")
+script = ExtResource("7_rm8x0")
+Mask = true
+Speed = 0.15
+Dither = true
+metadata/_custom_type_script = "uid://d0tq4244v8uaw"
 
 [node name="Fire2" type="AnimatedSprite2D" parent="Fires"]
 position = Vector2(482, 194)
@@ -130,9 +155,17 @@ sprite_frames = SubResource("SpriteFrames_0wykd")
 animation = &"new_animation"
 autoplay = "new_animation"
 
-[node name="LightSource" type="Node2D" parent="Fires/Fire2"]
-script = ExtResource("5_b4sbi")
-MaxSize = 150
+[node name="FauxLight" type="Sprite2D" parent="Fires/Fire2"]
+z_index = 1
+texture_filter = 2
+material = SubResource("ShaderMaterial_ukqpv")
+instance_shader_parameters/speed = 0.25
+scale = Vector2(2, 2)
+texture = SubResource("GradientTexture2D_w80ca")
+script = ExtResource("7_rm8x0")
+Mask = true
+Dither = true
+metadata/_custom_type_script = "uid://d0tq4244v8uaw"
 
 [node name="Fire3" type="AnimatedSprite2D" parent="Fires"]
 position = Vector2(746, 198)
@@ -140,8 +173,17 @@ sprite_frames = SubResource("SpriteFrames_0wykd")
 animation = &"new_animation"
 autoplay = "new_animation"
 
-[node name="LightSource" type="Node2D" parent="Fires/Fire3"]
-script = ExtResource("5_b4sbi")
+[node name="FauxLight" type="Sprite2D" parent="Fires/Fire3"]
+z_index = 1
+texture_filter = 2
+material = SubResource("ShaderMaterial_ukqpv")
+instance_shader_parameters/speed = 0.25
+scale = Vector2(2, 2)
+texture = SubResource("GradientTexture2D_w80ca")
+script = ExtResource("7_rm8x0")
+Mask = true
+Dither = true
+metadata/_custom_type_script = "uid://d0tq4244v8uaw"
 
 [node name="Fire4" type="AnimatedSprite2D" parent="Fires"]
 position = Vector2(190, 96)
@@ -149,32 +191,42 @@ sprite_frames = SubResource("SpriteFrames_0wykd")
 animation = &"new_animation"
 autoplay = "new_animation"
 
-[node name="LightSource" type="Node2D" parent="Fires/Fire4"]
-script = ExtResource("5_b4sbi")
+[node name="FauxLight" type="Sprite2D" parent="Fires/Fire4"]
+z_index = 1
+texture_filter = 2
+material = SubResource("ShaderMaterial_ukqpv")
+instance_shader_parameters/speed = 0.4
+texture = SubResource("GradientTexture2D_w80ca")
+script = ExtResource("7_rm8x0")
+Mask = true
+Speed = 0.4
+Dither = true
+metadata/_custom_type_script = "uid://d0tq4244v8uaw"
 
 [node name="Foregrounds" type="Node2D" parent="."]
 
-[node name="LightDisplay" type="Node2D" parent="Foregrounds" node_paths=PackedStringArray("Sources")]
-texture_filter = 2
-script = ExtResource("1_64alp")
-Sources = [NodePath("../../GodotBot/LightSource"), NodePath("../../Fires/Fire2/LightSource"), NodePath("../../Fires/Fire1/LightSource"), NodePath("../../Fires/Fire3/LightSource"), NodePath("../../Fires/Fire4/LightSource")]
-Texture = SubResource("GradientTexture2D_delhg")
-QuantizeSize = 1
-Levels = 1
-Pattern = 1
-Dither = true
+[node name="BackBufferCopy" type="BackBufferCopy" parent="Foregrounds"]
+copy_mode = 2
 
-[node name="ColorBackground" type="ColorRect" parent="Foregrounds/LightDisplay"]
+[node name="Parallax2DStatic" type="Parallax2D" parent="Foregrounds"]
+scroll_scale = Vector2(0, 0)
+
+[node name="ColorBackground" type="ColorRect" parent="Foregrounds/Parallax2DStatic"]
 modulate = Color(1, 1, 1, 0.803922)
 texture_filter = 1
-offset_right = 944.0
-offset_bottom = 365.0
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_right = 360.0
+offset_bottom = 270.0
+grow_horizontal = 2
+grow_vertical = 2
 color = Color(0, 0, 0, 0.635294)
 
-[node name="Parallax2D" type="Parallax2D" parent="Foregrounds/LightDisplay"]
+[node name="Parallax2D" type="Parallax2D" parent="Foregrounds"]
 scroll_scale = Vector2(1.4, 0)
 
-[node name="ForegroundTrees" type="Sprite2D" parent="Foregrounds/LightDisplay/Parallax2D"]
+[node name="ForegroundTrees" type="Sprite2D" parent="Foregrounds/Parallax2D"]
 texture_filter = 1
 position = Vector2(0, -458)
 texture = ExtResource("9_hacek")

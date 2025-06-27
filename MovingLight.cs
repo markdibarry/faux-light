@@ -3,7 +3,7 @@ using Godot;
 
 namespace FauxLight;
 
-public partial class MovingLight : LightSource
+public partial class MovingLight : FauxLight
 {
     [Export(PropertyHint.Range, "0.0, 50.0")]
     public float Distance { get; set; } = 10;
