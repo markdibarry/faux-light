@@ -20,6 +20,7 @@ public partial class LightMesh : MultiMeshInstance2D
         Levels = _levels;
         Pattern = _pattern;
         Texture ??= GetDefaultTexture();
+        Sources = [];
     }
 
     public LightMesh(ShaderMaterial shader) : this()
@@ -27,17 +28,22 @@ public partial class LightMesh : MultiMeshInstance2D
         _shader = shader;
     }
 
+    private static readonly StringName QuantizeSizeUniform = "quantize_size";
+    private static readonly StringName LevelsUniform = "levels";
+    private static readonly StringName DitherPatternUniform = "dither_pattern";
+    private static readonly StringName DitherEnabledUniform = "dither_enabled";
+
     [ExportGroup("Sources"), Export]
     public GCol.Array<LightSource?> Sources
     {
-        get => _sources;
+        get => field;
         set
         {
             if (value.Count != value.Distinct().Count())
                 return;
 
-            _sources = value;
-            Reset();
+            Reset(value);
+            field = value;
         }
     }
     [ExportGroup("Dither"), Export(PropertyHint.Range, "0,1000")]
@@ -47,7 +53,7 @@ public partial class LightMesh : MultiMeshInstance2D
         set
         {
             _quantizeSize = value;
-            _shader.SetShaderParameter("quantize_size", value);
+            _shader.SetShaderParameter(QuantizeSizeUniform, value);
         }
     }
     [Export(PropertyHint.Range, "1,16,1")]
@@ -57,7 +63,7 @@ public partial class LightMesh : MultiMeshInstance2D
         set
         {
             _levels = value;
-            _shader.SetShaderParameter("levels", value);
+            _shader.SetShaderParameter(LevelsUniform, value);
         }
     }
     [Export(PropertyHint.Range, "1,3,1")]
@@ -67,7 +73,7 @@ public partial class LightMesh : MultiMeshInstance2D
         set
         {
             _pattern = value;
-            _shader.SetShaderParameter("dither_pattern", value);
+            _shader.SetShaderParameter(DitherPatternUniform, value);
         }
     }
     [Export]
@@ -77,14 +83,12 @@ public partial class LightMesh : MultiMeshInstance2D
         set
         {
             _dither = value;
-            _shader.SetShaderParameter("dither_enabled", value);
+            _shader.SetShaderParameter(DitherEnabledUniform, value);
         }
     }
 
     private const int MeshSize = 50;
-    private readonly HashSet<int> _availableIndices = [];
-    private readonly Dictionary<LightSource, int> _indexLookup = [];
-    private GCol.Array<LightSource?> _sources = [];
+    private Dictionary<LightSource, int> _sourceToIndex = [];
     private MultiMesh _multiMesh;
     private QuadMesh _quadMesh;
     private readonly ShaderMaterial _shader;
@@ -97,81 +101,72 @@ public partial class LightMesh : MultiMeshInstance2D
     /// <summary>
     /// Resets all lookups and light sources
     /// </summary>
-    private void Reset()
+    private void Reset(GCol.Array<LightSource?> newSources)
     {
+        GD.Print("Resetting.");
         Multimesh = _multiMesh;
         Texture ??= GetDefaultTexture();
         Material = _shader;
 
-        foreach (KeyValuePair<LightSource, int> kvp in _indexLookup)
+        foreach (var kvp in _sourceToIndex)
             UnsubscribeLightEvents(kvp.Key);
 
-        _availableIndices.Clear();
-        _indexLookup.Clear();
+        _sourceToIndex.Clear();
+        _multiMesh.InstanceCount = newSources.Count;
 
-        LightSource[] sources = _sources.OfType<LightSource>().ToArray();
-        int oldCount = Math.Max(_multiMesh.InstanceCount, sources.Length);
-        _multiMesh.InstanceCount = 0;
-        AddInstances(oldCount);
-
-        foreach (LightSource source in sources)
+        for (int i = 0; i < newSources.Count; i++)
         {
-            SubscribeLightEvents(source);
-            AddLightSource(source);
+            if (newSources[i] is not LightSource lightSource)
+                continue;
+
+            _sourceToIndex.Add(lightSource, i);
+            _multiMesh.SetInstanceTransform2D(i, GetLightTransform(lightSource));
+            _multiMesh.SetInstanceCustomData(i, GetLightCustomData(lightSource));
+            SubscribeLightEvents(lightSource);
         }
-
-        // Fill out the remaining blank instances
-        for (int i = sources.Length; i < _multiMesh.InstanceCount; i++)
-        {
-            int index = GetFreeIndex();
-            _availableIndices.Remove(index);
-            _multiMesh.SetInstanceTransform2D(index, new());
-        }
-    }
-
-    /// <summary>
-    /// Adds instances to the available indicies.
-    /// </summary>
-    /// <param name="toAdd"></param>
-    private void AddInstances(int toAdd)
-    {
-        if (toAdd == 0)
-            return;
-
-        int oldCount = _multiMesh.InstanceCount;
-        int newCount = oldCount + toAdd;
-        _multiMesh.InstanceCount = newCount;
-
-        for (int i = oldCount; i < toAdd; i++)
-            _availableIndices.Add(i);
     }
 
     /// <summary>
     /// Adds a light source
     /// </summary>
     /// <param name="lightSource"></param>
-    private void AddLightSource(LightSource lightSource)
+    private void AddLightSource(LightSource lightSource, bool sub = true)
     {
-        if (_indexLookup.ContainsKey(lightSource))
+        if (_sourceToIndex.ContainsKey(lightSource))
             return;
 
-        int index = GetFreeIndex();
-        _availableIndices.Remove(index);
-        _indexLookup.Add(lightSource, index);
+        int index = _multiMesh.InstanceCount;
+        _multiMesh.InstanceCount++;
+        Sources.Add(lightSource);
+        _sourceToIndex.Add(lightSource, index);
         _multiMesh.SetInstanceTransform2D(index, GetLightTransform(lightSource));
         _multiMesh.SetInstanceCustomData(index, GetLightCustomData(lightSource));
+
+        if (sub)
+            SubscribeLightEvents(lightSource);
     }
 
-    /// <summary>
-    /// Gets a free index from the available indices and adds instances if none exist.
-    /// </summary>
-    /// <returns></returns>
-    private int GetFreeIndex()
+    private void RemoveLightSource(LightSource lightSource, bool unsub = true)
     {
-        if (_availableIndices.Count == 0)
-            AddInstances(_multiMesh.InstanceCount);
+        if (!_sourceToIndex.TryGetValue(lightSource, out int index))
+            return;
 
-        return _availableIndices.First();
+        // Move last source to now open spot
+        if (index != Sources.Count - 1)
+        {
+            LightSource lastSource = Sources[^1];
+            Sources[index] = lastSource;
+            _sourceToIndex[lastSource] = index;
+            _multiMesh.SetInstanceTransform2D(index, GetLightTransform(lastSource));
+            _multiMesh.SetInstanceCustomData(index, GetLightCustomData(lastSource));
+        }
+
+        Sources.RemoveAt(Sources.Count - 1);
+        _sourceToIndex.Remove(lightSource);
+        _multiMesh.InstanceCount--;
+
+        if (unsub)
+            UnsubscribeLightEvents(lightSource);
     }
 
     /// <summary>
@@ -227,7 +222,7 @@ public partial class LightMesh : MultiMeshInstance2D
 
     private void OnLightSourceVisibilityUpdated(LightSource lightSource)
     {
-        if (!_indexLookup.TryGetValue(lightSource, out int index))
+        if (!_sourceToIndex.TryGetValue(lightSource, out int index))
             return;
 
         if (lightSource.IsVisibleInTree())
@@ -238,29 +233,12 @@ public partial class LightMesh : MultiMeshInstance2D
 
     private void OnLightSourceParented(LightSource lightSource)
     {
-        AddLightSource(lightSource);
-        _sources.Add(lightSource);
+        AddLightSource(lightSource, false);
     }
 
     private void OnLightSourceUnparented(LightSource lightSource)
     {
-        RemoveLightSource(lightSource);
-    }
-
-    private void OnLightSourceDeleted(LightSource lightSource)
-    {
-        UnsubscribeLightEvents(lightSource);
-    }
-
-    private void RemoveLightSource(LightSource lightSource)
-    {
-        if (!_indexLookup.TryGetValue(lightSource, out int index))
-            return;
-
-        _sources.Remove(lightSource);
-        _indexLookup.Remove(lightSource);
-        _availableIndices.Add(index);
-        _multiMesh.SetInstanceTransform2D(index, new());
+        RemoveLightSource(lightSource, false);
     }
 
     private void SubscribeLightEvents(LightSource lightSource)
@@ -268,7 +246,6 @@ public partial class LightMesh : MultiMeshInstance2D
         lightSource.Parented += OnLightSourceParented;
         lightSource.GlobalPositionChanged += OnLightSourceGlobalPositionChanged;
         lightSource.Unparented += OnLightSourceUnparented;
-        lightSource.Deleted += OnLightSourceDeleted;
         lightSource.VisibilityUpdated += OnLightSourceVisibilityUpdated;
     }
 
@@ -277,13 +254,12 @@ public partial class LightMesh : MultiMeshInstance2D
         lightSource.Parented -= OnLightSourceParented;
         lightSource.GlobalPositionChanged -= OnLightSourceGlobalPositionChanged;
         lightSource.Unparented -= OnLightSourceUnparented;
-        lightSource.Deleted -= OnLightSourceDeleted;
         lightSource.VisibilityUpdated -= OnLightSourceVisibilityUpdated;
     }
 
     private void UpdateLightPosition(LightSource lightSource)
     {
-        if (!_indexLookup.TryGetValue(lightSource, out int index))
+        if (!_sourceToIndex.TryGetValue(lightSource, out int index))
             return;
 
         UpdateLightPosition(lightSource, index);

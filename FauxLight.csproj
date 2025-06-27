@@ -4,5 +4,6 @@
     <Nullable>enable</Nullable>
     <EnableDynamicLoading>true</EnableDynamicLoading>
     <RootNamespace>FauxLight</RootNamespace>
+    <LangVersion>Preview</LangVersion>
   </PropertyGroup>
 </Project>

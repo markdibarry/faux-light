@@ -8,7 +8,7 @@ public partial class LightDisplay : Node2D
 {
     public LightDisplay()
     {
-        var shader = new ShaderMaterial() { Shader = GD.Load<Shader>("res://shaders/faux_lights.gdshader") };
+        ShaderMaterial shader = new() { Shader = GD.Load<Shader>("res://shaders/faux_lights.gdshader") };
         shader.SetShaderParameter("snap_to_world", true);
         _lightHub = new(shader);
         BackBufferCopy backBufferCopy = new() { CopyMode = BackBufferCopy.CopyModeEnum.Viewport };

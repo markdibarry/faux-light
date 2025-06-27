@@ -62,6 +62,7 @@ animations = [{
 [sub_resource type="Gradient" id="Gradient_0bvsy"]
 offsets = PackedFloat32Array(0.5, 1)
 colors = PackedColorArray(0, 0, 0, 1, 0, 0, 0, 0)
+metadata/_snap_enabled = true
 
 [sub_resource type="GradientTexture2D" id="GradientTexture2D_delhg"]
 gradient = SubResource("Gradient_0bvsy")

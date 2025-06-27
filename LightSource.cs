@@ -1,5 +1,5 @@
-﻿using Godot;
-using System;
+﻿using System;
+using Godot;
 
 namespace FauxLight;
 
@@ -34,7 +34,6 @@ public partial class LightSource : Node2D
     public event Action<LightSource>? GlobalPositionChanged;
     public event Action<LightSource>? Parented;
     public event Action<LightSource>? Unparented;
-    public event Action<LightSource>? Deleted;
     public event Action<LightSource>? VisibilityUpdated;
 
     private int _maxSize = 100;
@@ -46,7 +45,7 @@ public partial class LightSource : Node2D
         {
             case NotificationParented:
                 Parented?.Invoke(this);
-                CallDeferred(MethodName.ResetPosition);
+                //CallDeferred(MethodName.ResetPosition);
                 break;
             case NotificationTransformChanged:
                 GlobalPositionChanged?.Invoke(this);
@@ -54,17 +53,14 @@ public partial class LightSource : Node2D
             case NotificationUnparented:
                 Unparented?.Invoke(this);
                 break;
-            case NotificationPredelete:
-                Deleted?.Invoke(this);
-                break;
             case NotificationVisibilityChanged:
                 VisibilityUpdated?.Invoke(this);
                 break;
         }
     }
 
-    private void ResetPosition()
-    {
-        Position = Vector2.Zero;
-    }
+    // private void ResetPosition()
+    // {
+    //     Position = Vector2.Zero;
+    // }
 }
