@@ -92,6 +92,7 @@ vec4 getQuantizeTextureUV(vec2 in_uv) {
 
         uv = offset + uv;
     } else {
+        texture_size *= vec2(v_model_matrix[0].x, v_model_matrix[1].y);
         uv *= texture_size;
         result.zw = uv;
         uv = _snap(uv, q);

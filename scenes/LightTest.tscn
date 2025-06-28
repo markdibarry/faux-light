@@ -110,7 +110,7 @@ tile_map_data = PackedByteArray("AAAAAAAAAAAAAAAAAAAAAAEAAAAAAAAAAAAAAAIAAAAAAAA
 tile_set = SubResource("TileSet_6brs3")
 
 [node name="GodotBot" parent="." instance=ExtResource("5_tjmol")]
-position = Vector2(205, 181)
+position = Vector2(185, 183)
 
 [node name="Camera2D" type="Camera2D" parent="GodotBot"]
 ignore_rotation = false
@@ -221,7 +221,7 @@ offset_right = 360.0
 offset_bottom = 270.0
 grow_horizontal = 2
 grow_vertical = 2
-color = Color(0, 0, 0, 0.635294)
+color = Color(0, 0, 0, 0.78431374)
 
 [node name="Parallax2D" type="Parallax2D" parent="Foregrounds"]
 scroll_scale = Vector2(1.4, 0)

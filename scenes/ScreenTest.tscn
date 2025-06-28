@@ -27,11 +27,11 @@ shader_parameter/snap_to_world = true
 shader_parameter/limit_subpixels = true
 shader_parameter/dither_enabled = true
 shader_parameter/dither_pattern = 1
-shader_parameter/levels = 2
+shader_parameter/levels = 4
 shader_parameter/contrast = 1.0
 shader_parameter/brightness = 0.0
 shader_parameter/average = 0.0
-shader_parameter/palette_mode = 0
+shader_parameter/palette_mode = 1
 shader_parameter/palette = ExtResource("5_nqncu")
 
 [node name="Control" type="MarginContainer"]
@@ -91,7 +91,7 @@ layout_mode = 2
 [node name="ColorRect" type="ColorRect" parent="Control3"]
 material = SubResource("ShaderMaterial_8qlki")
 layout_mode = 0
-offset_left = 45.0
-offset_top = 24.0
-offset_right = 305.0
-offset_bottom = 247.0
+offset_left = 44.0
+offset_top = 23.0
+offset_right = 304.0
+offset_bottom = 246.0
