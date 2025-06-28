@@ -23,6 +23,7 @@ public partial class FauxLight : Sprite2D
     }
 
     private static readonly StringName MaskUniform = "mask";
+    private static readonly StringName FPSUniform = "fps";
     private static readonly StringName SnapToWorldUniform = "snap_to_world";
     private static readonly StringName SpeedUniform = "speed";
     private static readonly StringName QuantizeSizeUniform = "quantize_size";
@@ -40,6 +41,16 @@ public partial class FauxLight : Sprite2D
             Shader?.SetShaderParameter(MaskUniform, value);
         }
     }
+    [Export]
+    public int FPS
+    {
+        get => field;
+        set
+        {
+            field = value;
+            Shader?.SetShaderParameter(FPSUniform, value);
+        }
+    } = 10;
     [Export(PropertyHint.Range, "0.0, 5.0")]
     public float Speed
     {

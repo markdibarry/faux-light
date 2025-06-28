@@ -21,6 +21,7 @@ sources/0 = SubResource("TileSetAtlasSource_0esiw")
 [sub_resource type="ShaderMaterial" id="ShaderMaterial_ukqpv"]
 shader = ExtResource("6_rm8x0")
 shader_parameter/mask = true
+shader_parameter/fps = 10
 shader_parameter/quantize_size = 1
 shader_parameter/snap_to_world = true
 shader_parameter/limit_subpixels = true

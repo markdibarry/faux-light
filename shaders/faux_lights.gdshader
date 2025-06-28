@@ -2,6 +2,7 @@ shader_type canvas_item;
 
 uniform sampler2D SCREEN_TEXTURE : hint_screen_texture, filter_nearest;
 uniform bool mask;
+uniform int fps = 10;
 instance uniform float speed : hint_range(0.0, 5.0);
 
 #include "res://shaders/quantize.gdshaderinc"
@@ -13,8 +14,8 @@ float triangle(float in_time, float in_speed) {
 
 void vertex() {
     // Change to adjust FPS
-    float fps = 1. / 10.0;
-    float time = floor(TIME / fps) * fps;
+    float fps_f = 1. / float(fps);
+    float time = floor(TIME / fps_f) * fps_f;
     float f = 1.;
 
     if (speed != 0.) {
