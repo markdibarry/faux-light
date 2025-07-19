@@ -103,7 +103,7 @@ shader_parameter/levels = 4
 shader_parameter/contrast = 1.0
 shader_parameter/brightness = 0.0
 shader_parameter/average = 0.0
-shader_parameter/palette_mode = 1
+shader_parameter/palette_mode = 0
 shader_parameter/palette = ExtResource("3_c7x75")
 
 [node name="Node3D" type="Node3D"]

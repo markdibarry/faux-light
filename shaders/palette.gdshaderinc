@@ -34,5 +34,5 @@ vec4 addPalette(vec4 in_c, float in_levels) {
     int col = index % palette_size.x;
     int row = index / palette_size.x ;
     vec2 uv = (vec2(ivec2(col, row)) + 0.5) / vec2(palette_size);
-    return texture(palette, uv);
+    return vec4(texture(palette, uv).rgb, in_c.a);
 }
