@@ -1,4 +1,4 @@
-[gd_scene load_steps=7 format=3 uid="uid://biafelirbatgh"]
+[gd_scene format=3 uid="uid://biafelirbatgh"]
 
 [ext_resource type="Shader" uid="uid://hi601atjjqfb" path="res://shaders/dither_main.gdshader" id="1_ap4am"]
 [ext_resource type="Texture2D" uid="uid://cv2ophpod6f0" path="res://assets/Pizza-Hat.jpg" id="3_gedrb"]
@@ -62,22 +62,22 @@ shader_parameter/brightness = 0.0
 shader_parameter/average = 0.0
 shader_parameter/palette_mode = 0
 
-[node name="TextureTest" type="Node2D"]
+[node name="TextureTest" type="Node2D" unique_id=1260330718]
 
-[node name="PizzaHat" type="Sprite2D" parent="."]
+[node name="PizzaHat" type="Sprite2D" parent="." unique_id=1184775670]
 material = SubResource("ShaderMaterial_kbr2t")
 position = Vector2(-10, -1)
 texture = ExtResource("3_gedrb")
 centered = false
 flip_h = true
 
-[node name="PizzaHat2" type="MeshInstance2D" parent="."]
+[node name="PizzaHat2" type="MeshInstance2D" parent="." unique_id=1706578831]
 material = SubResource("ShaderMaterial_78wix")
 position = Vector2(872, 309)
 mesh = SubResource("ArrayMesh_ejs4y")
 texture = ExtResource("3_gedrb")
 
-[node name="PizzaHat3" type="TextureRect" parent="."]
+[node name="PizzaHat3" type="TextureRect" parent="." unique_id=1180702874]
 material = SubResource("ShaderMaterial_ap4am")
 offset_left = 1243.0
 offset_top = -15.0

@@ -1,60 +1,29 @@
-[gd_scene load_steps=8 format=3 uid="uid://bg062alaay7uq"]
+[gd_scene format=3 uid="uid://bg062alaay7uq"]
 
 [ext_resource type="Texture2D" uid="uid://c12kj1yjl0hs3" path="res://assets/icon.svg" id="1_bs577"]
 [ext_resource type="Texture2D" uid="uid://dhoyvu2djof2l" path="res://assets/3DShapes.png" id="1_ggic3"]
-[ext_resource type="Shader" uid="uid://hi601atjjqfb" path="res://shaders/dither_main.gdshader" id="2_xcgye"]
-[ext_resource type="Texture2D" uid="uid://b7st3hj23u8vj" path="res://assets/orc.png" id="3_ggic3"]
+[ext_resource type="Shader" uid="uid://dmpy544vw2eaj" path="res://scenes/MaskTest.gdshader" id="3_xnal8"]
 [ext_resource type="Texture2D" uid="uid://s0jve0ef5k8f" path="res://assets/gradient.tres" id="4_xnal8"]
 
 [sub_resource type="ShaderMaterial" id="ShaderMaterial_62vw1"]
-shader = ExtResource("2_xcgye")
-shader_parameter/texture_mode = 0
-shader_parameter/alpha_mode = 2
-shader_parameter/quantize_size = 2
-shader_parameter/snap_to_world = true
-shader_parameter/limit_subpixels = true
-shader_parameter/dither_enabled = true
-shader_parameter/dither_pattern = 1
-shader_parameter/levels = 2
-shader_parameter/contrast = 1.0
-shader_parameter/brightness = 0.0
-shader_parameter/average = 0.0
-shader_parameter/palette_mode = 0
+shader = ExtResource("3_xnal8")
 
-[sub_resource type="ShaderMaterial" id="ShaderMaterial_xnal8"]
-shader = ExtResource("2_xcgye")
-shader_parameter/texture_mode = 0
-shader_parameter/alpha_mode = 2
-shader_parameter/quantize_size = 1
-shader_parameter/snap_to_world = false
-shader_parameter/limit_subpixels = true
-shader_parameter/dither_enabled = true
-shader_parameter/dither_pattern = 1
-shader_parameter/levels = 2
-shader_parameter/contrast = 1.0
-shader_parameter/brightness = 0.0
-shader_parameter/average = 0.0
-shader_parameter/palette_mode = 0
+[node name="MaskTest" type="Node2D" unique_id=610789334]
 
-[node name="MaskTest" type="Node2D"]
-
-[node name="3dShapes" type="Sprite2D" parent="."]
+[node name="3dShapes" type="Sprite2D" parent="." unique_id=1922234044]
 position = Vector2(101, 98.00001)
 scale = Vector2(0.24009904, 0.240099)
 texture = ExtResource("1_ggic3")
 
-[node name="CanvasGroup" type="CanvasGroup" parent="."]
+[node name="BackBufferCopy" type="BackBufferCopy" parent="." unique_id=381129719]
+copy_mode = 2
 
-[node name="Icon" type="Sprite2D" parent="CanvasGroup"]
-position = Vector2(60, 58)
+[node name="Icon" type="Sprite2D" parent="." unique_id=96241699]
+position = Vector2(71, 63)
 texture = ExtResource("1_bs577")
 
-[node name="Gradient" type="Sprite2D" parent="CanvasGroup"]
+[node name="Gradient" type="Sprite2D" parent="." unique_id=1154536134]
+z_index = 1
 material = SubResource("ShaderMaterial_62vw1")
-position = Vector2(37, 86)
+position = Vector2(35, 70)
 texture = ExtResource("4_xnal8")
-
-[node name="Orc" type="Sprite2D" parent="CanvasGroup"]
-material = SubResource("ShaderMaterial_xnal8")
-position = Vector2(111, 71)
-texture = ExtResource("3_ggic3")

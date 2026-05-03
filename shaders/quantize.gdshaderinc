@@ -7,8 +7,10 @@ uniform bool snap_to_world;
 uniform bool limit_subpixels = true;
 group_uniforms;
 
-varying mat4 v_model_matrix;
-varying mat4 v_alt_matrix;
+varying mat2 v_model_matrix;
+varying vec2 v_model_tr;
+varying mat2 v_alt_matrix;
+varying vec2 v_alt_tr;
 varying vec2 v_vertex;
 varying flat int v_quant_size;
 varying flat vec4 v_texture_data;
@@ -29,32 +31,32 @@ vec2 _snap(vec2 in_uv, float in_q_size) {
     return (floor(in_uv / in_q_size) + 0.5) * in_q_size;
 }
 
-vec4 getQuantizeScreenUV(vec2 in_screen_uv) {
+vec4 getQuantizeScreenUV(vec2 in_screen_uv, vec2 screen_pixel_size) {
     vec4 result;
 
     if (v_quant_size == 0) {
         result.xy = in_screen_uv;
-        result.zw = (v_model_matrix * vec4(v_vertex, 0, 1)).xy;
+        result.zw = v_model_matrix * v_vertex + v_model_tr;
         return result;
     }
 
     if (snap_to_world) {
-        vec2 uv = (v_model_matrix * vec4(v_vertex, 0, 1)).xy;
+        vec2 uv = v_model_matrix * v_vertex + v_model_tr;
         result.zw = uv + EPSILON;
         uv = _snap(uv, float(v_quant_size));
-        uv = (v_alt_matrix * vec4(uv, 0,1)).xy;
+        uv = v_alt_matrix * uv + v_alt_tr;
         uv = uv * 0.5 + 0.5;
         result.xy = uv;
         return result;
     } else {
         vec2 origin_uv = v_texture_data.xy;
-        vec2 quant_pixel_size = v_texture_data.zw;
+        vec2 quant_pixel_size = screen_pixel_size * v_texture_data.zw;
         vec2 uv = in_screen_uv - origin_uv;
         uv = (floor(uv / quant_pixel_size) + 0.5) * quant_pixel_size;
 
         uv = uv + origin_uv;
         vec2 clipXY = uv * 2.0 - 1.;
-        vec2 world_pos = (v_alt_matrix * vec4(clipXY, 0.0, 1.0)).xy;
+        vec2 world_pos = v_alt_matrix * clipXY + v_alt_tr;
         result.zw = world_pos + EPSILON;
         result.xy = uv;
         return result;
@@ -64,11 +66,11 @@ vec4 getQuantizeScreenUV(vec2 in_screen_uv) {
 vec4 getQuantizeTextureUV(vec2 in_uv) {
     vec4 result;
     vec2 texture_size = v_texture_data.xy;
-    vec2 flip = v_texture_data.zw;
+    vec2 flip = vec2(dFdx(in_uv).x < 0. ? 1. : 0., dFdy(in_uv).y < 0. ? 1. : 0.);
 
     if (v_quant_size == 0) {
         result.xy = in_uv;
-        result.zw = (v_model_matrix * vec4(in_uv * texture_size, 0, 1)).xy;
+        result.zw = v_model_matrix * (in_uv * texture_size) + v_model_tr;
         return result;
     }
 
@@ -84,15 +86,15 @@ vec4 getQuantizeTextureUV(vec2 in_uv) {
         uv -= offset;
 
         uv *= texture_size;
-        uv = (v_model_matrix * vec4(uv, 0, 1)).xy;
+        uv = v_model_matrix * uv + v_model_tr;
         result.zw = uv;
         uv = _snap(uv, q);
-        uv = (v_alt_matrix * vec4(uv, 0, 1)).xy;
+        uv = v_alt_matrix * uv + v_alt_tr;
         uv *= inv_texture_size;
 
         uv = offset + uv;
     } else {
-        texture_size *= vec2(v_model_matrix[0].x, v_model_matrix[1].y);
+        texture_size *= vec2(v_model_matrix[0][0], v_model_matrix[1][1]);
         uv *= texture_size;
         result.zw = uv;
         uv = _snap(uv, q);

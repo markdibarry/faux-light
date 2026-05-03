@@ -24,14 +24,15 @@ void vertex() {
 
     float zoom = length(CANVAS_MATRIX[1].xyz);
     v_quant_size = getQuantizeSize(zoom);
-    v_model_matrix = MODEL_MATRIX;
-    v_alt_matrix = inverse(MODEL_MATRIX);
+    v_model_matrix = mat2(MODEL_MATRIX[0].xy, MODEL_MATRIX[1].xy);
+    v_model_tr = MODEL_MATRIX[3].xy;
+    mat4 alt_mat = inverse(MODEL_MATRIX);
+    v_alt_matrix = mat2(alt_mat[0].xy, alt_mat[1].xy);
+    v_alt_tr = alt_mat[3].xy;
 
     VERTEX = VERTEX * f;
     v_vertex = VERTEX;
     v_texture_data.xy = (1. / TEXTURE_PIXEL_SIZE) * f;
-    // Is texture flipped
-    v_texture_data.zw = max(-sign((UV - 0.5) * VERTEX), 0.);
 }
 
 void fragment() {
